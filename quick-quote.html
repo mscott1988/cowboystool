@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Quote Generator</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: #0B1F3A;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      padding: 2rem;
+    }
+    .container {
+      background: #334232;
+      padding: 2rem;
+      border-radius: 14px;
+      max-width: 800px;
+      margin: auto;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: none;
+      margin-top: 0.25rem;
+    }
+    button {
+      margin-top: 2rem;
+      background: #E63946;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      color: white;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .results {
+      margin-top: 2rem;
+      background: #1e2a24;
+      padding: 1rem;
+      border-radius: 10px;
+    }
+    .footer-nav {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    .footer-nav a {
+      background: #E63946;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Quick Quote Generator</h2>
+    <label for="brand">Brand:</label>
+    <select id="brand">
+      <option value="Day & Night">Day & Night</option>
+      <option value="York">York</option>
+    </select>
+    <label for="tier">System Tier:</label>
+    <select id="tier">
+      <option value="Good">Good</option>
+      <option value="Better">Better</option>
+      <option value="Best">Best</option>
+    </select>
+    <label for="tonnage">Size (Tons):</label>
+    <select id="tonnage">
+      <option value="2">2 Ton</option>
+      <option value="2.5">2.5 Ton</option>
+      <option value="3">3 Ton</option>
+      <option value="3.5">3.5 Ton</option>
+      <option value="4">4 Ton</option>
+      <option value="5">5 Ton</option>
+    </select>
+    <label for="markup">Labor & Markup ($):</label>
+    <input type="number" id="markup" placeholder="Enter install/labor total" />
+    <button onclick="generateQuote()">Generate Quote</button>
+    <div class="results" id="quoteOutput">Select options to see a quick quote...</div>
+    <div class="footer-nav">
+      <a href="index.html">← Return to Main Menu</a>
+    </div>
+  </div>
+  <script>
+    const basePrices = {
+      'Day & Night': { Good: 3200, Better: 4200, Best: 5400 },
+      'York': { Good: 3300, Better: 4350, Best: 5550 }
+    };
+    function generateQuote() {
+      const brand = document.getElementById('brand').value;
+      const tier = document.getElementById('tier').value;
+      const tonnage = parseFloat(document.getElementById('tonnage').value);
+      const markup = parseFloat(document.getElementById('markup').value || 0);
+      const base = basePrices[brand][tier];
+      const price = base + (tonnage - 2) * 250 + markup;
+      document.getElementById('quoteOutput').innerHTML = `
+        <strong>Quote Summary:</strong><br>
+        Brand: ${brand}<br>
+        Tier: ${tier}<br>
+        Size: ${tonnage} Ton<br>
+        Estimated Total: <strong>$${price.toFixed(2)}</strong>
+      `;
+    }
+  </script>
+</body>
+</html>
