@@ -1,7 +1,14 @@
-const CACHE_NAME = 'cowboys-ac-cache-v1';
+const CACHE_NAME = 'cowboys-ac-cache-v2';
 const urlsToCache = [
   '/',
+  '/index.html',
   '/dashboard.html',
+  '/warranty.html',
+  '/installer-checklist.html',
+  '/tech-mapout.html',
+  '/parts-restock.html',
+  '/pricing-catalog.html',
+  '/technician-kiosk.html',
   '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png'

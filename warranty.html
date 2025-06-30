@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cowboys AC Warranty Form</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+</head>
+<body>
+  <div class="form-container">
+    <form id="warrantyForm">
+      <div class="step active" id="step-1">
+        <h2>Step 1: Employee & Customer Info</h2>
+        <label>Employee</label>
+        <select name="employee" required>
+          <option value="">-- Select Employee --</option>
+          <option>Employee 1</option>
+          <option>Employee 2</option>
+        </select>
+        <label>Customer Name</label>
+        <input type="text" name="customerName" required>
+        <button type="button" class="next">Next</button>
+      </div>
+
+      <div class="step" id="step-2">
+        <h2>Step 2: Equipment Details</h2>
+        <label>Brand</label>
+        <input type="text" name="brand">
+        <label>Model Number</label>
+        <input type="text" name="modelNumber">
+        <button type="button" class="prev">Back</button>
+        <button type="button" class="next">Next</button>
+      </div>
+
+      <div class="step" id="step-3">
+        <h2>Step 3: Return & Upload</h2>
+        <label>Will Return to Manufacturer?</label>
+        <select name="returnToManufacturer">
+          <option>No</option>
+          <option>Yes</option>
+        </select>
+        <label>Upload Photo</label>
+        <input type="file" name="photoUpload">
+        <button type="button" class="prev">Back</button>
+        <button type="button" class="next">Next</button>
+      </div>
+
+      <div class="step" id="step-4">
+        <h2>Step 4: Review & Signature</h2>
+        <label>Signature</label>
+        <input type="text" name="signature" placeholder="Type to sign">
+        <button type="button" class="prev">Back</button>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+    <div class="footer">© 2025 Cowboys AC – All Rights Reserved</div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
