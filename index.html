@@ -2,62 +2,90 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cowboys AC App Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <script defer src="https://unpkg.com/lucide@latest"></script>
   <style>
-    .header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #334232;
+    body {
+      margin: 0;
+      background: #0B1F3A;
+      font-family: 'Outfit', sans-serif;
       color: white;
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem 1rem;
+    }
+    .logo {
+      max-width: 180px;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
       margin-bottom: 1.5rem;
     }
-    .datetime {
-      font-size: 0.9rem;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.25rem;
+      width: 100%;
+      max-width: 900px;
     }
-    .footer-nav {
+    .tile {
+      background: #334232;
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
       text-align: center;
-      margin-top: 2rem;
-    }
-    .footer-nav a {
-      background: #E63946;
-      color: white;
-      padding: 10px 20px;
+      transition: transform 0.2s ease;
       text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
+      color: white;
+    }
+    .tile:hover {
+      transform: translateY(-4px);
+      background: #3f5038;
+    }
+    .tile svg {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 0.75rem;
+    }
+    .footer {
+      margin-top: auto;
+      font-size: 0.85rem;
+      color: #aaa;
+      padding-top: 2rem;
+      text-align: center;
+    }
+    .banner {
+      background: #E63946;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      font-size: 0.85rem;
     }
   </style>
 </head>
 <body>
-  <div class="form-container">
-    <div class="header-bar">
-      <div>Dashboard</div>
-      <div class="datetime" id="datetime">Loading time...</div>
-    </div>
-    <div class="content">
-<p>Welcome to the Cowboys AC Technician & Installer Dashboard.</p>
-    </div>
-    <div class="footer-nav">
-      <a href="index.html">← Return to Main Menu</a>
-    </div>
-    <div class="footer">© 2025 Cowboys AC – All Rights Reserved</div>
+  <img src="logo.png" alt="Cowboys AC Logo" class="logo" />
+  <div class="banner">For Testing Purposes Only</div>
+  <h1>Cowboys AC Dashboard</h1>
+  <div class="grid">
+    <a class="tile" href="warranty.html"><i data-lucide="clipboard-list"></i><div>Warranty Form</div></a>
+    <a class="tile" href="installer-checklist.html"><i data-lucide="check-square"></i><div>Installer Checklist</div></a>
+    <a class="tile" href="tech-mapout.html"><i data-lucide="map"></i><div>Tech Map Out</div></a>
+    <a class="tile" href="parts-restock.html"><i data-lucide="package-plus"></i><div>Parts & Restock</div></a>
+    <a class="tile" href="pricing-catalog.html"><i data-lucide="dollar-sign"></i><div>Pricing Catalog</div></a>
+    <a class="tile" href="quick-quote.html"><i data-lucide="file-text"></i><div>Quick Quote</div></a>
+    <a class="tile" href="technician-kiosk.html"><i data-lucide="touchpad"></i><div>Technician Kiosk</div></a>
   </div>
+  <div class="footer">© 2025 Cowboys AC – All Rights Reserved</div>
   <script>
-    function updateDateTime() {
-      const now = new Date();
-      const dateTimeStr = now.toLocaleString('en-US', {
-        weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
-        hour: '2-digit', minute: '2-digit'
-      });
-      document.getElementById('datetime').textContent = dateTimeStr;
-    }
-    setInterval(updateDateTime, 60000);
-    updateDateTime();
+    lucide.createIcons();
   </script>
 </body>
 </html>
