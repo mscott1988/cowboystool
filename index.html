@@ -2,88 +2,138 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cowboys AC App Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <style>
-    body {
-      margin: 0;
-      background: #0B1F3A;
-      font-family: 'Outfit', sans-serif;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      padding: 2rem 1rem;
-    }
-    .logo {
-      max-width: 180px;
-      margin-bottom: 1rem;
-    }
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1.25rem;
-      width: 100%;
-      max-width: 800px;
-    }
-    .tile {
-      background: #334232;
-      border-radius: 16px;
-      padding: 1.5rem 1rem;
-      text-align: center;
-      transition: transform 0.2s ease;
-      text-decoration: none;
-      color: white;
-    }
-    .tile:hover {
-      transform: translateY(-4px);
-      background: #3f5038;
-    }
-    .tile svg {
-      width: 36px;
-      height: 36px;
-      margin-bottom: 0.75rem;
-    }
-    .footer {
-      margin-top: auto;
-      font-size: 0.85rem;
-      color: #aaa;
-      padding-top: 2rem;
-      text-align: center;
-    }
-    .banner {
-      background: #E63946;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-      font-size: 0.85rem;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cowboys AC Warranty Form</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 <body>
-  <img src="logo.png" alt="Cowboys AC Logo" class="logo" />
-  <div class="banner">For Testing Purposes Only</div>
-  <h1>Cowboys AC App Portal</h1>
-  <div class="grid">
-    <a class="tile" href="warranty.html"><i data-lucide="clipboard-list"></i><div>Warranty Form</div></a>
-    <a class="tile" href="dashboard.html"><i data-lucide="layout-dashboard"></i><div>Dashboard</div></a>
-    <a class="tile" href="installer-checklist.html"><i data-lucide="check-square"></i><div>Installer Checklist</div></a>
-    <a class="tile" href="tech-mapout.html"><i data-lucide="map"></i><div>Tech Map Out</div></a>
-    <a class="tile" href="parts-restock.html"><i data-lucide="package-plus"></i><div>Parts & Restock</div></a>
-    <a class="tile" href="pricing-catalog.html"><i data-lucide="dollar-sign"></i><div>Pricing Catalog</div></a>
-    <a class="tile" href="technician-kiosk.html"><i data-lucide="touchpad"></i><div>Technician Kiosk</div></a>
+  <div class="form-container">
+    <form id="warrantyForm">
+      <!-- Step 1 -->
+      <div class="form-step active">
+        <img src="logo.png" class="logo" alt="Cowboys AC Logo" />
+        <h2>Step 1: Employee & Customer Info</h2>
+
+        <label>Employee</label>
+        <select name="employee" required>
+          <option value="">-- Select Employee --</option>
+          <option>Employee 1</option>
+<option>Employee 2</option>
+<option>Employee 3</option>
+<option>Employee 4</option>
+<option>Employee 5</option>
+<option>Employee 6</option>
+<option>Employee 7</option>
+<option>Employee 8</option>
+<option>Employee 9</option>
+<option>Employee 10</option>
+<option>Employee 11</option>
+<option>Employee 12</option>
+<option>Employee 13</option>
+<option>Employee 14</option>
+<option>Employee 15</option>
+<option>Employee 16</option>
+<option>Employee 17</option>
+<option>Employee 18</option>
+<option>Employee 19</option>
+<option>Employee 20</option>
+<option>Employee 21</option>
+<option>Employee 22</option>
+<option>Employee 23</option>
+<option>Employee 24</option>
+<option>Employee 25</option>
+        </select>
+
+        <label>Customer Name</label>
+        <input type="text" name="customerName" required />
+        <label>Customer Address</label>
+        <input type="text" name="customerAddress" required />
+        <label>City, State, Zip</label>
+        <input type="text" name="customerCityStateZip" />
+        <label>Phone Number</label>
+        <input type="tel" name="customerPhone" />
+        <label>Install Date</label>
+        <input type="date" name="installDate" />
+        <label>Installer Name(s)</label>
+        <input type="text" name="installers" />
+        <label>Invoice #</label>
+        <input type="text" name="invoice" />
+        <button type="button" class="next">Next</button>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="form-step">
+        <h2>Step 2: Equipment Info</h2>
+        <label>Brand</label>
+        <input type="text" name="brand" />
+        <label>Model Number</label>
+        <input type="text" name="modelNumber" />
+        <label>Serial Number</label>
+        <input type="text" name="serialNumber" />
+        <label>Part Type</label>
+        <select name="partType">
+          <option>Control Board</option>
+          <option>Condenser</option>
+          <option>Coil</option>
+          <option>Fan Motor</option>
+          <option>Capacitor</option>
+          <option>Compressor</option>
+          <option>Other</option>
+        </select>
+        <label>Original Install Date (if different)</label>
+        <input type="date" name="originalInstallDate" />
+        <label>Reason for Claim</label>
+        <textarea name="claimReason" rows="3"></textarea>
+        <label>Parts Being Replaced</label>
+        <textarea name="partsReplaced" rows="2"></textarea>
+        <div class="nav-buttons">
+          <button type="button" class="prev">Back</button>
+          <button type="button" class="next">Next</button>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="form-step">
+        <h2>Step 3: Return Info & Upload</h2>
+        <label>Will Employee Return Part to Manufacturer?</label>
+        <select name="returnToManufacturer" id="returnToManufacturer">
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+        <div id="locationContainer" class="hidden">
+          <label>If Yes, Select Return Location</label>
+          <select name="returnLocation">
+            <option>Century</option>
+            <option>Robert Madden</option>
+            <option>Inseco</option>
+            <option>Carrier</option>
+            <option>Johnstone</option>
+            <option>Lennox</option>
+          </select>
+        </div>
+        <label>Upload Photo</label>
+        <input type="file" name="photoUpload" accept="image/*" />
+        <div class="nav-buttons">
+          <button type="button" class="prev">Back</button>
+          <button type="button" class="next">Next</button>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="form-step">
+        <h2>Step 4: Review & Signature</h2>
+        <label>Employee Signature (I certify the above information is correct to the best of my knowledge)</label>
+        <input type="text" name="signature" placeholder="Type name to sign" />
+        <div class="nav-buttons">
+          <button type="button" class="prev">Back</button>
+          <button type="submit">Submit</button>
+        </div>
+      </div>
+    </form>
+    <div class="footer">© 2025 Cowboys AC – All Rights Reserved</div>
   </div>
-  <div class="footer">© 2025 Cowboys AC – All Rights Reserved</div>
-  <script>lucide.createIcons();</script>
+  <script src="script.js"></script>
 </body>
 </html>
