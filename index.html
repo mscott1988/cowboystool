@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cowboys AC App Portal</title>
+  <title>Cowboys AC Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
   <script defer src="https://unpkg.com/lucide@latest"></script>
   <style>
@@ -12,80 +12,144 @@
       background: #0B1F3A;
       font-family: 'Outfit', sans-serif;
       color: white;
+      min-height: 100vh;
+      padding: 2rem 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-      padding: 2rem 1rem;
+      position: relative;
+      overflow-x: hidden;
     }
-    .logo {
-      max-width: 180px;
-      margin-bottom: 1rem;
+    .animated-bg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.05;
     }
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 1.5rem;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1.25rem;
+    .content {
+      position: relative;
+      z-index: 10;
       width: 100%;
       max-width: 900px;
     }
-    .tile {
-      background: #334232;
-      border-radius: 16px;
-      padding: 1.5rem 1rem;
-      text-align: center;
-      transition: transform 0.2s ease;
-      text-decoration: none;
-      color: white;
-    }
-    .tile:hover {
-      transform: translateY(-4px);
-      background: #3f5038;
-    }
-    .tile svg {
-      width: 36px;
-      height: 36px;
-      margin-bottom: 0.75rem;
-    }
-    .footer {
-      margin-top: auto;
-      font-size: 0.85rem;
-      color: #aaa;
-      padding-top: 2rem;
-      text-align: center;
+    .logo {
+      max-width: 180px;
+      margin: 0 auto 1rem;
+      display: block;
     }
     .banner {
       background: #E63946;
       padding: 0.5rem 1rem;
       border-radius: 8px;
       font-weight: 600;
-      margin-bottom: 1.5rem;
+      margin: 1rem auto 2rem;
       text-transform: uppercase;
       font-size: 0.85rem;
+      text-align: center;
+      max-width: 300px;
+    }
+    .weather-bar {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      color: #ccc;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.25rem;
+      width: 100%;
+    }
+    .tile {
+      background: #334232;
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      text-decoration: none;
+      color: white;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .tile:hover {
+      transform: translateY(-4px);
+      background: #3f5038;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    .tile svg {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 0.75rem;
+      transition: transform 0.3s ease, stroke 0.3s ease;
+    }
+    .tile:hover svg {
+      transform: scale(1.2);
+      stroke: #E63946;
+    }
+    .footer {
+      font-size: 0.85rem;
+      color: #aaa;
+      text-align: center;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
-  <img src="logo.png" alt="Cowboys AC Logo" class="logo" />
-  <div class="banner">For Testing Purposes Only</div>
-  <h1>Cowboys AC Dashboard</h1>
-  <div class="grid">
-    <a class="tile" href="warranty.html"><i data-lucide="clipboard-list"></i><div>Warranty Form</div></a>
-    <a class="tile" href="installer-checklist.html"><i data-lucide="check-square"></i><div>Installer Checklist</div></a>
-    <a class="tile" href="tech-mapout.html"><i data-lucide="map"></i><div>Tech Map Out</div></a>
-    <a class="tile" href="parts-restock.html"><i data-lucide="package-plus"></i><div>Parts & Restock</div></a>
-    <a class="tile" href="pricing-catalog.html"><i data-lucide="dollar-sign"></i><div>Pricing Catalog</div></a>
-    <a class="tile" href="quick-quote.html"><i data-lucide="file-text"></i><div>Quick Quote</div></a>
-    <a class="tile" href="technician-kiosk.html"><i data-lucide="touchpad"></i><div>Technician Kiosk</div></a>
+  <svg class="animated-bg" viewBox="0 0 1440 320"><path fill="#ffffff" fill-opacity="1" d="M0,224L60,202.7C120,181,240,139,360,122.7C480,107,600,117,720,144C840,171,960,213,1080,208C1200,203,1320,149,1380,122.7L1440,96L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"></path></svg>
+
+  <div class="content">
+    <img src="logo.png" alt="Cowboys AC Logo" class="logo" />
+    <div class="banner">For Testing Purposes Only</div>
+    <div class="weather-bar">
+      <div id="date">Loading date…</div>
+      <div id="weather">Loading weather…</div>
+    </div>
+    <h1>Cowboys AC Dashboard</h1>
+    <div class="grid">
+      <a class="tile" href="warranty.html"><i data-lucide="clipboard-list"></i><div>Warranty Form</div></a>
+      <a class="tile" href="installer-checklist.html"><i data-lucide="check-square"></i><div>Installer Checklist</div></a>
+      <a class="tile" href="tech-mapout.html"><i data-lucide="map"></i><div>Tech Map Out</div></a>
+      <a class="tile" href="parts-restock.html"><i data-lucide="package-plus"></i><div>Parts & Restock</div></a>
+      <a class="tile" href="pricing-catalog.html"><i data-lucide="dollar-sign"></i><div>Pricing Catalog</div></a>
+      <a class="tile" href="quick-quote.html"><i data-lucide="file-text"></i><div>Quick Quote</div></a>
+      <a class="tile" href="technician-kiosk.html"><i data-lucide="touchpad"></i><div>Technician Kiosk</div></a>
+    </div>
+    <div class="footer">© 2025 Cowboys AC – All Rights Reserved</div>
   </div>
-  <div class="footer">© 2025 Cowboys AC – All Rights Reserved</div>
+
   <script>
     lucide.createIcons();
+
+    const dateEl = document.getElementById('date');
+    const weatherEl = document.getElementById('weather');
+
+    function updateDate() {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      dateEl.textContent = `📅 ${dateStr}`;
+    }
+
+    async function fetchWeather() {
+      try {
+        const res = await fetch('https://wttr.in/?format=%t+%c');
+        const txt = await res.text();
+        weatherEl.textContent = `🌡️ ${txt}`;
+      } catch {
+        weatherEl.textContent = '🌡️ N/A';
+      }
+    }
+
+    updateDate();
+    fetchWeather();
   </script>
 </body>
 </html>
