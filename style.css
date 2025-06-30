@@ -1,1 +1,49 @@
-body { font-family: Arial; }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #0B1F3A;
+  color: white;
+  padding: 2rem;
+}
+
+form {
+  max-width: 600px;
+  margin: auto;
+  background: #334232;
+  padding: 2rem;
+  border-radius: 10px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-top: 1rem;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+  margin-top: 0.25rem;
+  border: none;
+}
+
+button {
+  margin-top: 1.5rem;
+  background: #E63946;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.step {
+  display: none;
+}
+.step.active {
+  display: block;
+}
