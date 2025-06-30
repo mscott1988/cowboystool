@@ -2,84 +2,88 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cowboys AC PWA – Test Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cowboys AC App Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     body {
-      background: #0B1F3A;
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 2rem;
+      background: #0B1F3A;
+      font-family: 'Outfit', sans-serif;
+      color: white;
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100vh;
+      padding: 2rem 1rem;
     }
-    img.logo {
-      width: 200px;
+    .logo {
+      max-width: 180px;
       margin-bottom: 1rem;
     }
     h1 {
-      margin-bottom: 1rem;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
     }
-    .test-banner {
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1.25rem;
+      width: 100%;
+      max-width: 800px;
+    }
+    .tile {
+      background: #334232;
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
+      text-align: center;
+      transition: transform 0.2s ease;
+      text-decoration: none;
+      color: white;
+    }
+    .tile:hover {
+      transform: translateY(-4px);
+      background: #3f5038;
+    }
+    .tile svg {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 0.75rem;
+    }
+    .footer {
+      margin-top: auto;
+      font-size: 0.85rem;
+      color: #aaa;
+      padding-top: 2rem;
+      text-align: center;
+    }
+    .banner {
       background: #E63946;
       padding: 0.5rem 1rem;
-      border-radius: 5px;
-      font-weight: bold;
-      margin-bottom: 2rem;
-    }
-    .nav-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      width: 100%;
-      max-width: 400px;
-    }
-    a.button {
-      display: block;
-      text-align: center;
-      background: #E63946;
-      color: white;
-      padding: 1rem;
       border-radius: 8px;
-      text-decoration: none;
-      font-size: 1.2rem;
-      transition: background 0.2s ease;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      font-size: 0.85rem;
     }
-    a.button:hover {
-      background: #c52e3b;
-    }
-  
-    @keyframes slideFadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-30px) scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    .logo.animated {
-      animation: slideFadeIn 1.2s ease-out forwards;
-      opacity: 0;
-    }
-    </style>
+  </style>
 </head>
 <body>
-  <img class="logo animated" src="logo.png" alt="Cowboys AC Logo">
-  <div class="test-banner">FOR TESTING PURPOSES ONLY</div>
-  <h1>Cowboys AC App Links</h1>
-  <div class="nav-buttons">
-    <a class="button" href="warranty.html">Warranty Form</a>
-    <a class="button" href="dashboard.html">Dashboard</a>
-    <a class="button" href="installer-checklist.html">Installer Checklist</a>
-    <a class="button" href="tech-mapout.html">Tech Map Out</a>
-    <a class="button" href="parts-restock.html">Parts & Restock</a>
-    <a class="button" href="pricing-catalog.html">Pricing Catalog</a>
-    <a class="button" href="technician-kiosk.html">Technician Kiosk</a>
+  <img src="logo.png" alt="Cowboys AC Logo" class="logo" />
+  <div class="banner">For Testing Purposes Only</div>
+  <h1>Cowboys AC App Portal</h1>
+  <div class="grid">
+    <a class="tile" href="warranty.html"><i data-lucide="clipboard-list"></i><div>Warranty Form</div></a>
+    <a class="tile" href="dashboard.html"><i data-lucide="layout-dashboard"></i><div>Dashboard</div></a>
+    <a class="tile" href="installer-checklist.html"><i data-lucide="check-square"></i><div>Installer Checklist</div></a>
+    <a class="tile" href="tech-mapout.html"><i data-lucide="map"></i><div>Tech Map Out</div></a>
+    <a class="tile" href="parts-restock.html"><i data-lucide="package-plus"></i><div>Parts & Restock</div></a>
+    <a class="tile" href="pricing-catalog.html"><i data-lucide="dollar-sign"></i><div>Pricing Catalog</div></a>
+    <a class="tile" href="technician-kiosk.html"><i data-lucide="touchpad"></i><div>Technician Kiosk</div></a>
   </div>
+  <div class="footer">© 2025 Cowboys AC – All Rights Reserved</div>
+  <script>lucide.createIcons();</script>
 </body>
 </html>
