@@ -114,10 +114,16 @@
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 1.25rem;
     }
     .tile {
+      word-wrap: break-word;
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       background: #334232;
       border-radius: 16px;
       padding: 1.5rem 1rem;
