@@ -2,129 +2,131 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parts Restock Request</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Parts & Restock</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    .header-bar {
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: #0B1F3A;
+      color: white;
+      padding: 2rem;
+      margin: 0;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    .parts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .part {
+      background: #334232;
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .part:hover {
+      background: #3f5038;
+    }
+    .selected-items {
+      background: rgba(255,255,255,0.05);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+    }
+    .item-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #334232;
-      color: white;
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
-      margin-bottom: 1.5rem;
+      margin-bottom: 0.75rem;
     }
-    .datetime {
-      font-size: 0.9rem;
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .footer-nav {
-      text-align: center;
-      margin-top: 2rem;
-    }
-    .footer-nav a {
+    button {
       background: #E63946;
-      color: white;
-      padding: 10px 20px;
-      text-decoration: none;
+      border: none;
+      padding: 0.4rem 0.75rem;
       border-radius: 6px;
-      font-weight: bold;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1rem;
-    }
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: left;
-    }
-    th {
-      background: #334232;
       color: white;
+      cursor: pointer;
+    }
+    .submit-btn {
+      display: block;
+      margin: 1rem auto 0;
+      font-size: 1rem;
     }
   </style>
 </head>
 <body>
-  <div class="header-bar">
-    <div>Parts Restock Request</div>
-    <div class="datetime" id="datetime">Loading time...</div>
+  <h1>Parts & Restock</h1>
+  <div class="parts-grid" id="partsGrid">
+    <div class="part" data-name="Drain Pan">Drain Pan</div>
+    <div class="part" data-name="PVC 90°">PVC 90°</div>
+    <div class="part" data-name="Float Switch">Float Switch</div>
+    <div class="part" data-name="Capacitor 45/5">Cap 45/5</div>
+    <div class="part" data-name="Thermostat Wire">Thermostat Wire</div>
+    <div class="part" data-name="Tape Roll">Tape Roll</div>
   </div>
-  <div class="form-container">
-    <h2>HVAC Parts Restock Form</h2>
-    <label for="role">Role:</label>
-    <select id="role">
-      <option value="Service Technician">Service Technician</option>
-      <option value="Installer">Installer</option>
-    </select>
-    <label for="employee">Employee Name:</label>
-    <input type="text" id="employee" placeholder="Enter your name" />
-    <label for="date">Date:</label>
-    <input type="date" id="date" />
-    <table id="partsTable">
-      <thead>
-        <tr>
-          <th>Part Name</th>
-          <th>Quantity</th>
-          <th>Notes</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <button onclick="submitForm()">Submit Request</button>
-    <div class="footer-nav">
-      <a href="index.html">← Return to Main Menu</a>
-    </div>
-    <div class="footer">© 2025 Cowboys AC – All Rights Reserved</div>
+
+  <div class="selected-items" id="selectedItems">
+    <h3>Selected Items</h3>
+    <div id="itemsList"></div>
   </div>
+
+  <button class="submit-btn" onclick="submitRestock()">Submit Restock Request</button>
+
   <script>
-    const partsList = [
-      "Capacitor (35/5)", "Capacitor (40/5)", "Capacitor (45/5)", "Capacitor (55/5)",
-      "Contactor (1 Pole)", "Contactor (2 Pole)", "Hard Start Kit", "TXV Valve",
-      "Drain Line", "Line Set 3/8 x 3/4", "Line Set 3/8 x 7/8", "Condenser Pad",
-      "Disconnect Box", "Whip", "Float Switch", "Thermostat (Non-Programmable)",
-      "Thermostat (WiFi)", "PVC Pipe (3/4 inch)", "Tape", "Zip Ties", "Refrigerant (R410A)"
-    ];
-    const tableBody = document.querySelector("#partsTable tbody");
-    partsList.forEach(part => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${part}</td>
-        <td><input type="number" min="0" /></td>
-        <td><input type="text" /></td>
-      `;
-      tableBody.appendChild(row);
+    const selected = {};
+
+    document.querySelectorAll('.part').forEach(el => {
+      el.addEventListener('click', () => {
+        const name = el.dataset.name;
+        if (!selected[name]) selected[name] = 0;
+        selected[name]++;
+        updateList();
+      });
     });
-    function submitForm() {
-      const employee = document.getElementById("employee").value;
-      const date = document.getElementById("date").value;
-      const role = document.getElementById("role").value;
-      const rows = document.querySelectorAll("#partsTable tbody tr");
-      let partsRequested = [];
-      rows.forEach(row => {
-        const partName = row.cells[0].textContent;
-        const quantity = row.cells[1].querySelector("input").value;
-        const notes = row.cells[2].querySelector("input").value;
-        if (quantity || notes) {
-          partsRequested.push(`${partName} - Qty: ${quantity || 0} - Notes: ${notes}`);
-        }
+
+    function updateList() {
+      const list = document.getElementById('itemsList');
+      list.innerHTML = '';
+      Object.keys(selected).forEach(key => {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.innerHTML = `
+          <div>${key}</div>
+          <div class="qty-control">
+            <button onclick="changeQty('${key}', -1)">−</button>
+            <span>${selected[key]}</span>
+            <button onclick="changeQty('${key}', 1)">+</button>
+          </div>
+        `;
+        list.appendChild(row);
       });
-      const body = `Role: ${role}\nEmployee: ${employee}\nDate: ${date}\n\nParts Requested:\n${partsRequested.join("\n")}`;
-      const mailto = `mailto:warehouse@cowboysac.com?subject=Parts Restock Request - ${role}&body=${encodeURIComponent(body)}`;
-      window.location.href = mailto;
     }
-    function updateDateTime() {
-      const now = new Date();
-      const dateTimeStr = now.toLocaleString('en-US', {
-        weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
-        hour: '2-digit', minute: '2-digit'
-      });
-      document.getElementById('datetime').textContent = dateTimeStr;
+
+    function changeQty(name, delta) {
+      selected[name] += delta;
+      if (selected[name] <= 0) delete selected[name];
+      updateList();
     }
-    setInterval(updateDateTime, 60000);
-    updateDateTime();
+
+    function submitRestock() {
+      let message = "Restock Request:\n";
+      for (const item in selected) {
+        message += `- ${item}: ${selected[item]}\n`;
+      }
+      alert(message);
+    }
   </script>
 </body>
 </html>
