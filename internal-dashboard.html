@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <div class="background-animated"></div>
+  <div class="background-circuit"></div>
 
   <div class="top-header">
     <img class="logo pulse" src="assets/logo.png" alt="Cowboys AC Logo" />
@@ -19,15 +19,23 @@
   <h1 class="title">Cowboys AC Utilities (Internal Use Only)</h1>
 
   <main class="grid">
-    <a href="warranty.html" class="tile fade">Warranty Form</a>
-    <a href="installer.html" class="tile fade">Installer Checklist</a>
-    <a href="techmap.html" class="tile fade">Tech Map Out</a>
-    <a href="restock.html" class="tile fade">Parts & Restock</a>
-    <a href="catalog.html" class="tile fade">Pricing Catalog</a>
-    <a href="quickquote.html" class="tile fade">Quick Quote</a>
-    <a href="kiosk.html" class="tile fade">Technician Pay Sheet</a>
+    <a href="https://mscott1988.github.io/technician-pay-sheet/" target="_blank" class="tile fade">
+      Technician Pay Sheet
+    </a>
   </main>
 
+  <section class="grid">
+    <div class="tile fade">
+      <h2 style="margin: 0 0 6px;">📦 Installs Today</h2>
+      <p class="text-2xl font-semibold" id="installsCount">0</p>
+    </div>
+  </section>
+
   <footer>© 2025 Cowboys AC – All Rights Reserved</footer>
+
+  <script>
+    const installsToday = 6;
+    document.getElementById('installsCount').textContent = installsToday;
+  </script>
 </body>
 </html>
