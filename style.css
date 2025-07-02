@@ -124,3 +124,42 @@ footer {
 .office-link:hover {
   background: #c9303a;
 }
+
+.top-header {
+  text-align: center;
+  margin-top: 20px;
+  position: relative;
+}
+.logo {
+  height: auto;
+  max-height: 80px;
+  max-width: 250px;
+  margin: 0 auto 10px auto;
+  display: block;
+}
+.testing-banner {
+  background-color: #E63946;
+  color: white;
+  display: inline-block;
+  padding: 8px 16px;
+  margin-top: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.office-link {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  background: #E63946;
+  color: white;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 10;
+}
+.office-link:hover {
+  background: #c9303a;
+}
