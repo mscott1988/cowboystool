@@ -1,26 +1,37 @@
-let currentStep = 0;
-const steps = document.querySelectorAll('.step');
-
-function showStep(index) {
-  steps.forEach((step, i) => {
-    step.classList.toggle('active', i === index);
+// Set current date & time
+function updateDateTime() {
+  const now = new Date();
+  const dateTimeString = now.toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true
   });
-  currentStep = index;
+  document.getElementById('current-datetime').textContent = dateTimeString;
 }
+setInterval(updateDateTime, 1000);
+updateDateTime();
 
-function nextStep() {
-  if (currentStep < steps.length - 1) {
-    showStep(currentStep + 1);
+// Fetch weather using OpenWeatherMap API
+async function fetchWeather() {
+  try {
+    const apiKey = 'YOUR_API_KEY'; // Replace with your actual key
+    const zip = '78233';
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${zip},us&appid=${apiKey}&units=imperial`);
+    const data = await response.json();
+
+    const temp = Math.round(data.main.temp);
+    const condition = data.weather[0].main;
+    document.getElementById('weather-info').textContent = `${temp}°F ${condition}`;
+  } catch (error) {
+    document.getElementById('weather-info').textContent = 'Weather unavailable';
   }
 }
+fetchWeather();
 
-function prevStep() {
-  if (currentStep > 0) {
-    showStep(currentStep - 1);
-  }
-}
-
-document.getElementById('warrantyForm').addEventListener('submit', (e) => {
-  e.preventDefault();
-  alert('Warranty submitted!');
-});
+// Static installs placeholder
+const installs = 6;
+document.getElementById('installs-count').textContent = installs;
