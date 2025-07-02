@@ -1,56 +1,32 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>Cowboys AC Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Animated background SVG -->
-  <div class="animated-background">
-    <img src="assets/circuit-background.svg" class="circuit-svg" alt="Circuit Background" />
-  </div>
-
-  <!-- Floating top legend bar -->
   <div class="top-bar">
-    <div class="legend-item">📦 Installs Today: <span id="installsCount">6</span></div>
-    <div class="legend-item">🕒 <span id="dateTime">--</span></div>
-    <div class="legend-item">🌤️ <span id="weather">92°F Clear</span></div>
+    <div class="installs">📦 Installs Today: 6</div>
+    <div class="datetime">📅 7/2/2025, 12:33:11 PM</div>
+    <div class="weather">🌤️ 92°F Clear</div>
   </div>
-
-  <!-- Header with logo and testing banner -->
-  <div class="top-header">
-    <img class="logo pulse" src="assets/logo.png" alt="Cowboys AC Logo" />
-    <div class="testing-banner">FOR TESTING PURPOSES ONLY</div>
-    <a href="internal-dashboard.html" class="office-link">Office Use Only</a>
+  <div class="logo-container">
+    <img src="assets/logo.png" alt="Cowboys AC Logo">
   </div>
-
-  <h1 class="title">Cowboys AC Dashboard</h1>
-
-  <!-- Button Grid -->
-  <main class="grid">
-    <a href="#" class="tile">Warranty Form</a>
-    <a href="#" class="tile">Installer Checklist</a>
-    <a href="#" class="tile">Tech Map Out</a>
-    <a href="#" class="tile">Parts & Restock</a>
-    <a href="#" class="tile">Pricing Catalog</a>
-    <a href="#" class="tile">Quick Quote</a>
-    <a href="#" class="tile">Technician Kiosk</a>
-    <a href="#" class="tile">Wiring Diagrams</a>
-  </main>
-
+  <div class="testing-banner">FOR TESTING PURPOSES ONLY</div>
+  <h1>Cowboys AC Dashboard</h1>
+  <nav>
+    <a href="#">Warranty Form</a>
+    <a href="#">Installer Checklist</a>
+    <a href="#">Tech Map Out</a>
+    <a href="#">Parts & Restock</a>
+    <a href="#">Pricing Catalog</a>
+    <a href="#">Quick Quote</a>
+    <a href="#">Technician Kiosk</a>
+    <a href="#">Wiring Diagrams</a>
+  </nav>
   <footer>© 2025 Cowboys AC – All Rights Reserved</footer>
-
-  <!-- Script for date/time -->
-  <script>
-    function updateDateTime() {
-      const now = new Date();
-      document.getElementById("dateTime").textContent = now.toLocaleString();
-    }
-    updateDateTime();
-    setInterval(updateDateTime, 60000);
-  </script>
 </body>
 </html>
