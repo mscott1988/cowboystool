@@ -1,9 +1,112 @@
 
-/* Floating Top Buttons */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0B1F3A;
+  background-image: url('assets/circuit-background.svg');
+  background-repeat: repeat;
+  background-size: cover;
+  color: white;
+  overflow-x: hidden;
+}
+
+header {
+  text-align: center;
+  padding: 1rem 0 0.5rem 0;
+}
+
+.logo {
+  max-height: 100px;
+  width: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+#status-bar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #0B1F3A;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 1rem;
+  z-index: 1000;
+  font-size: 0.95rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+#status-bar .left,
+#status-bar .center,
+#status-bar .right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dashboard-title {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-top: 120px;
+}
+
+.dashboard-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+  max-width: 960px;
+  width: 100%;
+  padding: 1rem;
+}
+
+.tile {
+  background-color: #334232;
+  color: white;
+  border-radius: 16px;
+  padding: 1.25rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+.tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  background-color: #3f503b;
+  cursor: pointer;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 0.85rem;
+  color: #ccc;
+}
+
+#testing-banner {
+  margin: 0 auto;
+  margin-top: 0.5rem;
+  background-color: #E63946;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
 .office-link,
 .back-link {
   position: absolute;
-  top: 80px; /* lower it more */
+  top: 65px;
   right: 20px;
   background-color: #E63946;
   color: white;
@@ -20,22 +123,4 @@
 .office-link:hover,
 .back-link:hover {
   background-color: #c92e3d;
-}
-
-/* Center Dashboard Grid */
-.dashboard-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 20px;
-  width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
-  justify-items: center;
 }
