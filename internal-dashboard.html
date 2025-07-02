@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cowboys AC Utilities (Internal Use Only)</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <body>
   <div class="animated-background">
@@ -22,9 +22,9 @@
   </div>
 
   <div class="top-bar">
-    <div class="legend-item">📦 Installs Today: <span id="installsCount">0</span></div>
+    <div class="legend-item">📦 Installs Today: <span id="installsCount">6</span></div>
     <div class="legend-item">🕒 <span id="dateTime">--</span></div>
-    <div class="legend-item">🌤️ <span id="weather">Loading...</span></div>
+    <div class="legend-item">🌤️ <span id="weather">92°F Clear</span></div>
   </div>
 
   <div class="top-header">
@@ -35,20 +35,19 @@
 
   <h1 class="title">Cowboys AC Utilities (Internal Use Only)</h1>
 
-  <iframe src="https://mscott1988.github.io/technician-pay-sheet/" class="iframe-tool" frameborder="0"></iframe>
+  <div class="button-grid">
+    <a href="https://mscott1988.github.io/technician-pay-sheet/" class="tile">Technician Pay Sheet</a>
+  </div>
 
   <footer>© 2025 Cowboys AC – All Rights Reserved</footer>
 
   <script>
-    const installsToday = 6;
-    document.getElementById('installsCount').textContent = installsToday;
     function updateDateTime() {
       const now = new Date();
       document.getElementById('dateTime').textContent = now.toLocaleString();
     }
     updateDateTime();
     setInterval(updateDateTime, 60000);
-    document.getElementById('weather').textContent = "🌤️ 92°F Clear";
   </script>
 </body>
 </html>

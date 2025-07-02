@@ -5,14 +5,11 @@ body {
   background: #0B1F3A;
   color: white;
   overflow-x: hidden;
-  position: relative;
 }
 .animated-background {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   z-index: -1;
 }
 .circuit-svg {
@@ -27,23 +24,26 @@ body {
 .top-bar {
   display: flex;
   justify-content: space-around;
-  background-color: rgba(0,0,0,0.3);
+  background: rgba(0,0,0,0.3);
   padding: 6px 12px;
-  font-size: 0.9rem;
-  z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
 }
 .legend-item {
   padding: 2px 10px;
+  font-size: 0.9rem;
 }
 .top-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 12px;
+  margin-top: 60px;
 }
 .logo {
   width: 200px;
-  height: auto;
 }
 .testing-banner {
   background: #E63946;
@@ -66,22 +66,35 @@ body {
 }
 .title {
   text-align: center;
-  margin: 20px 0 10px;
+  margin: 20px 0;
   font-size: 1.8rem;
 }
-.iframe-tool {
-  width: 95%;
-  height: 75vh;
-  display: block;
-  margin: 0 auto 40px;
-  border: 2px solid #334232;
-  border-radius: 10px;
-  background: white;
+.button-grid {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.tile {
+  background-color: #334232;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  width: 240px;
+  color: white;
+  text-decoration: none;
+  transition: transform 0.2s, background 0.2s;
+}
+.tile:hover {
+  background-color: #415646;
+  transform: scale(1.05);
 }
 footer {
   text-align: center;
   font-size: 0.85rem;
   color: #aaa;
+  margin-top: 60px;
   margin-bottom: 20px;
 }
 .pulse {
