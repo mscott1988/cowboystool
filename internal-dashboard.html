@@ -1,10 +1,10 @@
-<!-- Cowboys AC Main Dashboard -->
+<!-- Internal Utilities Dashboard: Cowboys AC -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cowboys AC Dashboard</title>
+  <title>Cowboys AC Utilities (Internal Use Only)</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
   <style>
     body {
@@ -33,18 +33,22 @@
   <header class="w-full flex justify-between items-center p-4 border-b border-gray-700">
     <img src="/assets/logo-white.png" alt="Cowboys AC Logo" class="h-12">
     <div class="text-center">
-      <h1 class="text-2xl font-bold text-white">Cowboys AC Dashboard</h1>
+      <h1 class="text-2xl font-bold text-white">Cowboys AC Utilities (Internal Use Only)</h1>
       <div class="text-sm mt-1" id="dateTimeDisplay"></div>
     </div>
     <div id="weatherWidget" class="text-sm text-right">🌤️ 92°F</div>
   </header>
 
-  <main class="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-    <a href="internal-dashboard.html" class="card rounded-2xl p-6 text-center hover:scale-105">
-      <h2 class="text-xl font-semibold mb-2 text-red-400">Office Use Only</h2>
-      <p class="text-sm text-gray-300">Access internal tools and utilities dashboard.</p>
+  <section class="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+    <a href="https://mscott1988.github.io/technician-pay-sheet/" target="_blank" class="card rounded-2xl p-6 text-center hover:scale-105">
+      <h2 class="text-xl font-semibold mb-2">Technician Pay Sheet</h2>
+      <p class="text-sm text-gray-300">Track daily hours, job numbers, and commissions.</p>
     </a>
-  </main>
+    <a href="index.html" class="card rounded-2xl p-6 text-center hover:scale-105">
+      <h2 class="text-xl font-semibold mb-2 text-blue-300">Back to Main Dashboard</h2>
+      <p class="text-sm text-gray-300">Return to Cowboys AC tools and install sections.</p>
+    </a>
+  </section>
 
   <section class="w-full max-w-5xl mt-8">
     <div class="widget">
