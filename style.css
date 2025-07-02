@@ -1,8 +1,9 @@
 
+/* Floating Top Buttons */
 .office-link,
 .back-link {
   position: absolute;
-  top: 60px; /* lower it slightly */
+  top: 80px; /* lower it more */
   right: 20px;
   background-color: #E63946;
   color: white;
@@ -19,4 +20,22 @@
 .office-link:hover,
 .back-link:hover {
   background-color: #c92e3d;
+}
+
+/* Center Dashboard Grid */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  justify-items: center;
 }
