@@ -40,6 +40,38 @@
     <a href="wiring.html" class="tile fade">Wiring Diagrams</a>
   </main>
 
+  
+<section class="grid">
+  <div class="tile fade">
+    <h2>📦 Installs Today</h2>
+    <p id="installsCount">0</p>
+  </div>
+  <div class="tile fade">
+    <h2>🕒 Date & Time</h2>
+    <p id="dateTime">--</p>
+  </div>
+  <div class="tile fade">
+    <h2>🌤️ Weather</h2>
+    <p id="weather">Loading...</p>
+  </div>
+</section>
+
+
   <footer>© 2025 Cowboys AC – All Rights Reserved</footer>
+  
+<script>
+  const installsToday = 6;
+  document.getElementById('installsCount').textContent = installsToday;
+
+  function updateDateTime() {
+    const now = new Date();
+    document.getElementById('dateTime').textContent = now.toLocaleString();
+  }
+  updateDateTime();
+  setInterval(updateDateTime, 60000);
+
+  document.getElementById('weather').textContent = "🌤️ 92°F Clear";
+</script>
+
 </body>
 </html>
