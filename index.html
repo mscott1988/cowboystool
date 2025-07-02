@@ -8,19 +8,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <body>
+  <!-- Animated background SVG -->
   <div class="animated-background">
-    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="circuitGradient" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stop-color="#00ffff" stop-opacity="0.1"/>
-          <stop offset="100%" stop-color="#00ffff" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      <path d="M0,10 H100 M0,30 H100 M0,50 H100 M0,70 H100 M0,90 H100" stroke="url(#circuitGradient)" stroke-width="0.2" />
-      <path d="M10,0 V100 M30,0 V100 M50,0 V100 M70,0 V100 M90,0 V100" stroke="url(#circuitGradient)" stroke-width="0.2" />
-    </svg>
+    <img src="assets/circuit-background.svg" class="circuit-svg" alt="Circuit Background" />
   </div>
 
+  <!-- Floating top legend bar -->
+  <div class="top-bar">
+    <div class="legend-item">📦 Installs Today: <span id="installsCount">6</span></div>
+    <div class="legend-item">🕒 <span id="dateTime">--</span></div>
+    <div class="legend-item">🌤️ <span id="weather">92°F Clear</span></div>
+  </div>
+
+  <!-- Header with logo and testing banner -->
   <div class="top-header">
     <img class="logo pulse" src="assets/logo.png" alt="Cowboys AC Logo" />
     <div class="testing-banner">FOR TESTING PURPOSES ONLY</div>
@@ -29,49 +29,28 @@
 
   <h1 class="title">Cowboys AC Dashboard</h1>
 
+  <!-- Button Grid -->
   <main class="grid">
-    <a href="warranty.html" class="tile fade">Warranty Form</a>
-    <a href="installer.html" class="tile fade">Installer Checklist</a>
-    <a href="techmap.html" class="tile fade">Tech Map Out</a>
-    <a href="restock.html" class="tile fade">Parts & Restock</a>
-    <a href="catalog.html" class="tile fade">Pricing Catalog</a>
-    <a href="quickquote.html" class="tile fade">Quick Quote</a>
-    <a href="kiosk.html" class="tile fade">Technician Kiosk</a>
-    <a href="wiring.html" class="tile fade">Wiring Diagrams</a>
+    <a href="#" class="tile">Warranty Form</a>
+    <a href="#" class="tile">Installer Checklist</a>
+    <a href="#" class="tile">Tech Map Out</a>
+    <a href="#" class="tile">Parts & Restock</a>
+    <a href="#" class="tile">Pricing Catalog</a>
+    <a href="#" class="tile">Quick Quote</a>
+    <a href="#" class="tile">Technician Kiosk</a>
+    <a href="#" class="tile">Wiring Diagrams</a>
   </main>
 
-  
-<section class="grid">
-  <div class="tile fade">
-    <h2>📦 Installs Today</h2>
-    <p id="installsCount">0</p>
-  </div>
-  <div class="tile fade">
-    <h2>🕒 Date & Time</h2>
-    <p id="dateTime">--</p>
-  </div>
-  <div class="tile fade">
-    <h2>🌤️ Weather</h2>
-    <p id="weather">Loading...</p>
-  </div>
-</section>
-
-
   <footer>© 2025 Cowboys AC – All Rights Reserved</footer>
-  
-<script>
-  const installsToday = 6;
-  document.getElementById('installsCount').textContent = installsToday;
 
-  function updateDateTime() {
-    const now = new Date();
-    document.getElementById('dateTime').textContent = now.toLocaleString();
-  }
-  updateDateTime();
-  setInterval(updateDateTime, 60000);
-
-  document.getElementById('weather').textContent = "🌤️ 92°F Clear";
-</script>
-
+  <!-- Script for date/time -->
+  <script>
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById("dateTime").textContent = now.toLocaleString();
+    }
+    updateDateTime();
+    setInterval(updateDateTime, 60000);
+  </script>
 </body>
 </html>
