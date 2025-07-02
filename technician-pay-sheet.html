@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Technician Pay Sheet</title>
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
+  <style>
+    body {
+      background-color: #0B1F3A;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .button {
+      background-color: #E63946;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+    }
+    .card {
+      background-color: #334232;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    label, input, select {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    input, select {
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+    }
+    #pdfButton {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <button class="button" onclick="location.href='internal-dashboard.html'">Back to Dashboard</button>
+    <div id="datetime"></div>
+  </div>
+
+  <div class="card">
+    <h2>Technician Pay Sheet</h2>
+    <form id="paySheetForm">
+      <label for="employee">Employee Name</label>
+      <input type="text" id="employee" name="employee" required>
+
+      <label for="installPrice">Install Price</label>
+      <input type="number" id="installPrice" name="installPrice" value="1000" required>
+
+      <label for="permitCost">Permit Cost</label>
+      <input type="number" id="permitCost" name="permitCost" value="100" required>
+
+      <label for="paymentType">Payment Type</label>
+      <select id="paymentType" name="paymentType">
+        <option value="cash">Cash</option>
+        <option value="credit">Credit Card</option>
+        <option value="finance">Financing</option>
+      </select>
+
+      <label for="equipmentCost">Equipment Cost</label>
+      <input type="number" id="equipmentCost" name="equipmentCost" required>
+
+      <label for="otherCosts">Other Costs</label>
+      <input type="number" id="otherCosts" name="otherCosts" required>
+
+      <button type="button" id="pdfButton" class="button">Generate PDF</button>
+    </form>
+
+    <div id="results" style="margin-top:20px;"></div>
+  </div>
+
+  <script>
+    function updateDateTime() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const time = now.toLocaleTimeString();
+      document.getElementById('datetime').textContent = now.toLocaleDateString(undefined, options) + ' ' + time;
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    document.getElementById('pdfButton').addEventListener('click', function() {
+      const installPrice = parseFloat(document.getElementById('installPrice').value);
+      const permitCost = parseFloat(document.getElementById('permitCost').value);
+      const equipmentCost = parseFloat(document.getElementById('equipmentCost').value);
+      const otherCosts = parseFloat(document.getElementById('otherCosts').value);
+      const paymentType = document.getElementById('paymentType').value;
+      const employee = document.getElementById('employee').value;
+
+      const officeExpenses = 0.05 * installPrice;
+      let paymentFee = 0;
+      if (paymentType === 'credit') paymentFee = 0.033 * installPrice;
+      else if (paymentType === 'finance') paymentFee = 0.08 * installPrice;
+
+      const totalCosts = permitCost + equipmentCost + otherCosts + officeExpenses + paymentFee;
+      const profit = installPrice - totalCosts;
+      const profitMargin = (profit / installPrice) * 100;
+
+      let commissionRate = 0.05;
+      if (profitMargin >= 55) commissionRate = 0.10;
+      else if (profitMargin >= 50) commissionRate = 0.08;
+
+      const commission = installPrice * commissionRate;
+
+      const results = `
+        <strong>Employee:</strong> ${employee}<br>
+        <strong>Install Price:</strong> $${installPrice.toFixed(2)}<br>
+        <strong>Total Costs (with office and payment fees):</strong> $${totalCosts.toFixed(2)}<br>
+        <strong>Profit:</strong> $${profit.toFixed(2)}<br>
+        <strong>Profit Margin:</strong> ${profitMargin.toFixed(2)}%<br>
+        <strong>Commission Rate:</strong> ${(commissionRate * 100).toFixed(0)}%<br>
+        <strong>Commission:</strong> $${commission.toFixed(2)}
+      `;
+
+      document.getElementById('results').innerHTML = results;
+
+      const doc = new window.jspdf.jsPDF();
+      doc.text(`Technician Pay Sheet
+
+${employee}
+Install: $${installPrice.toFixed(2)}
+Total Costs: $${totalCosts.toFixed(2)}
+Profit: $${profit.toFixed(2)}
+Margin: ${profitMargin.toFixed(2)}%
+Commission: $${commission.toFixed(2)}`, 10, 10);
+      doc.save(`${employee.replace(/\s+/g, '_')}_pay_sheet.pdf`);
+    });
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</body>
+</html>
