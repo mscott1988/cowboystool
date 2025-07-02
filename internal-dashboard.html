@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,49 +6,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cowboys AC Utilities (Internal Use Only)</title>
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <div class="animated-background">
-    <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="circuit-svg">
-      <defs>
-        <linearGradient id="brightCircuit" x1="0" x2="1" y1="0" y2="1">
-          <stop offset="0%" stop-color="#00ffff" stop-opacity="0.35"/>
-          <stop offset="100%" stop-color="#00ffff" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-      <path d="M0,10 H100 M0,30 H100 M0,50 H100 M0,70 H100 M0,90 H100" stroke="url(#brightCircuit)" stroke-width="0.3" />
-      <path d="M10,0 V100 M30,0 V100 M50,0 V100 M70,0 V100 M90,0 V100" stroke="url(#brightCircuit)" stroke-width="0.3" />
-    </svg>
-  </div>
-
   <div class="top-bar">
-    <div class="legend-item">📦 Installs Today: <span id="installsCount">6</span></div>
-    <div class="legend-item">🕒 <span id="dateTime">--</span></div>
-    <div class="legend-item">🌤️ <span id="weather">92°F Clear</span></div>
+    <span id="installs-today"><img src="icons/box.svg"> Installs Today: 6</span>
+    <span id="current-time"><img src="icons/clock.svg"> 7/2/2025, 12:33:11 PM</span>
+    <span id="weather"><img src="icons/weather.svg"> 92°F Clear</span>
+    <button class="back-to-dashboard" onclick="location.href='index.html'">← Back to Dashboard</button>
   </div>
 
-  <div class="top-header">
-    <img class="logo pulse" src="assets/logo.png" alt="Cowboys AC Logo" />
+  <header>
+    <img src="assets/logo.png" alt="Cowboys AC Logo" class="logo"/>
     <div class="testing-banner">FOR TESTING PURPOSES ONLY</div>
-    <a href="index.html" class="office-link">← Back to Dashboard</a>
-  </div>
+    <h1 class="dashboard-title">Cowboys AC Utilities (Internal Use Only)</h1>
+  </header>
 
-  <h1 class="title">Cowboys AC Utilities (Internal Use Only)</h1>
+  <main class="dashboard-grid">
+    <a class="tile" href="#">Technician Pay Sheet</a>
+  </main>
 
-  <div class="button-grid">
-    <a href="https://mscott1988.github.io/technician-pay-sheet/" class="tile">Technician Pay Sheet</a>
-  </div>
+  <footer>
+    © 2025 Cowboys AC – All Rights Reserved
+  </footer>
 
-  <footer>© 2025 Cowboys AC – All Rights Reserved</footer>
-
-  <script>
-    function updateDateTime() {
-      const now = new Date();
-      document.getElementById('dateTime').textContent = now.toLocaleString();
-    }
-    updateDateTime();
-    setInterval(updateDateTime, 60000);
-  </script>
+  <div id="circuit-background"></div>
 </body>
 </html>
