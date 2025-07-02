@@ -4,31 +4,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cowboys AC Utilities (Internal Use Only)</title>
+  <title>Cowboys AC Utilities</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="top-bar">
-    <span id="installs-today"><img src="icons/box.svg"> Installs Today: 6</span>
-    <span id="current-time"><img src="icons/clock.svg"> 7/2/2025, 12:33:11 PM</span>
-    <span id="weather"><img src="icons/weather.svg"> 92°F Clear</span>
-    <button class="back-to-dashboard" onclick="location.href='index.html'">← Back to Dashboard</button>
+    <span id="installs-today">📦 Installs Today: 6</span>
+    <span id="current-time">🕒 7/2/2025, 12:33 PM</span>
+    <span id="weather">🌤️ 92°F Clear</span>
   </div>
+
+  <a href="index.html" class="back-link">← Back to Dashboard</a>
 
   <header>
     <img src="assets/logo.png" alt="Cowboys AC Logo" class="logo"/>
-    <div class="testing-banner">FOR TESTING PURPOSES ONLY</div>
+    <div id="testing-banner">FOR TESTING PURPOSES ONLY</div>
     <h1 class="dashboard-title">Cowboys AC Utilities (Internal Use Only)</h1>
   </header>
 
-  <main class="dashboard-grid">
-    <a class="tile" href="#">Technician Pay Sheet</a>
-  </main>
+  <div class="dashboard-container">
+    <div class="dashboard-grid">
+      <a class="tile" href="#">Technician Pay Sheet</a>
+    </div>
+  </div>
 
-  <footer>
-    © 2025 Cowboys AC – All Rights Reserved
-  </footer>
-
-  <div id="circuit-background"></div>
+  <footer>© 2025 Cowboys AC – All Rights Reserved</footer>
 </body>
 </html>
