@@ -8,27 +8,26 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Background SVG -->
+  <!-- Circuit SVG background -->
   <div id="background-svg"></div>
 
-  <!-- Top bar -->
+  <!-- Top legend bar: logo, info panels, and floating Office button -->
   <header class="top-bar">
-    <div class="logo-wrapper">
-      <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo" />
-    </div>
-    <div class="info-panel">
+    <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo" />
+    <div class="info-panels">
       <div class="info-item">Installs Today: <span id="installs-count">0</span></div>
       <div class="info-item" id="date-time"></div>
       <div class="info-item" id="weather"></div>
     </div>
+    <a href="internal-dashboard.html" class="office-button">Office Use Only</a>
   </header>
 
-  <!-- Loading and Testing Banner -->
+  <!-- Loading indicator and testing banner -->
   <div class="loading">Loading time...</div>
   <div class="testing-banner">FOR TESTING PURPOSES ONLY</div>
 
-  <!-- Main Dashboard -->
-  <main>
+  <!-- Main dashboard grid -->
+  <main class="container">
     <h1 class="dashboard-title">Cowboys AC Dashboard</h1>
     <div class="dashboard-grid">
       <a class="tile-button" href="warranty-form.html">Warranty Form</a>
