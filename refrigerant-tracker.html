@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Refrigerant Tracker – Cowboys AC</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- External circuit SVG background -->
+  <div class="circuit-background">
+    <img src="assets/circuit-background.svg" alt="Circuit Background" class="svg-bg" />
+  </div>
+
+  <!-- Top legend bar -->
+  <header class="top-bar">
+    <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo" />
+    <div class="info-panels">
+      <div id="installs-today">Installs Today: <span id="installs-count">0</span></div>
+      <div id="date-time"></div>
+      <div id="weather"></div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Refrigerant Tracker</h1>
+    <form id="tracker-form">
+      <!-- Step 1: Role -->
+      <div class="step" id="step-1">
+        <label for="role">Role:</label>
+        <select id="role">
+          <option value="" disabled selected>Select role</option>
+          <option value="technician">Technician</option>
+          <option value="installer">Installer</option>
+        </select>
+        <button type="button" id="next-1" class="btn" disabled>Next</button>
+      </div>
+
+      <!-- Step 2: Employee -->
+      <div class="step" id="step-2" style="display:none">
+        <label for="employee">Employee:</label>
+        <select id="employee">
+          <option value="" disabled selected>Select employee</option>
+        </select>
+        <button type="button" id="next-2" class="btn" disabled>Next</button>
+      </div>
+
+      <!-- Step 3: Invoice Number -->
+      <div class="step" id="step-3" style="display:none">
+        <label for="invoice">Invoice Number:</label>
+        <input type="text" id="invoice" placeholder="Invoice #" />
+        <button type="button" id="next-3" class="btn" disabled>Next</button>
+      </div>
+
+      <!-- Step 4: Refrigerant Type -->
+      <div class="step" id="step-4" style="display:none">
+        <label>Refrigerant Type:</label>
+        <button type="button" class="refrig-btn btn" data-type="R-410A">R-410A</button>
+        <button type="button" class="refrig-btn btn" data-type="R-454B">R-454B</button>
+      </div>
+
+      <!-- Step 5: Tank Number -->
+      <div class="step" id="step-5" style="display:none">
+        <label for="tank">Tank #:</label>
+        <select id="tank">
+          <option value="" disabled selected>Select tank #</option>
+        </select>
+        <button type="button" id="next-5" class="btn" disabled>Next</button>
+      </div>
+
+      <!-- Step 6: Amount Used -->
+      <div class="step" id="step-6" style="display:none">
+        <label>Amount Used (lbs):</label>
+        <div class="quantity-control">
+          <button type="button" id="decrease" class="btn">-</button>
+          <input type="number" id="amount" value="0" step="0.5" min="0" max="25.5" readonly />
+          <button type="button" id="increase" class="btn">+</button>
+        </div>
+        <button type="button" id="next-6" class="btn" disabled>Next</button>
+      </div>
+
+      <!-- Step 7: Signature & Submit -->
+      <div class="step" id="step-7" style="display:none">
+        <label for="signature">Signature:</label>
+        <input type="text" id="signature" placeholder="Type your name to sign" />
+        <button type="submit" id="submit-btn" class="btn" disabled>Submit</button>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    // Wizard logic
+    const steps = [...document.querySelectorAll('.step')];
+    let selectedRole, selectedEmployee, invoiceNum, refrigType;
+
+    // Step handlers...
+    const roleEl = document.getElementById('role');
+    const next1 = document.getElementById('next-1');
+    roleEl.addEventListener('change', () => next1.disabled = !roleEl.value);
+    next1.addEventListener('click', () => {
+      selectedRole = roleEl.value;
+      showStep(2);
+      populateEmployees();
+    });
+
+    const employeeEl = document.getElementById('employee');
+    const next2 = document.getElementById('next-2');
+    employeeEl.addEventListener('change', () => next2.disabled = !employeeEl.value);
+    next2.addEventListener('click', () => {
+      selectedEmployee = employeeEl.value;
+      showStep(3);
+    });
+
+    const invoiceEl = document.getElementById('invoice');
+    const next3 = document.getElementById('next-3');
+    invoiceEl.addEventListener('input', () => next3.disabled = !invoiceEl.value.trim());
+    next3.addEventListener('click', () => {
+      invoiceNum = invoiceEl.value.trim();
+      showStep(4);
+    });
+
+    document.querySelectorAll('.refrig-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        refrigType = btn.dataset.type;
+        showStep(5);
+        populateTanks();
+      });
+    });
+
+    const tankEl = document.getElementById('tank');
+    const next5 = document.getElementById('next-5');
+    tankEl.addEventListener('change', () => next5.disabled = !tankEl.value);
+    next5.addEventListener('click', () => showStep(6));
+
+    const amtEl = document.getElementById('amount');
+    document.getElementById('increase').addEventListener('click', () => adjustAmount(0.5));
+    document.getElementById('decrease').addEventListener('click', () => adjustAmount(-0.5));
+    const next6 = document.getElementById('next-6');
+    amtEl.addEventListener('input', () => next6.disabled = !(amtEl.value > 0));
+    next6.addEventListener('click', () => showStep(7));
+
+    const sigEl = document.getElementById('signature');
+    const submitBtn = document.getElementById('submit-btn');
+    sigEl.addEventListener('input', () => submitBtn.disabled = !sigEl.value.trim());
+    document.getElementById('tracker-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const tankNum = tankEl.value;
+      const amountUsed = amtEl.value;
+      const signature = sigEl.value.trim();
+      const recipients = ['warehouse@cowboysac.com','michael@cowboysac.com','alfonso@cowboysac.com'];
+      const subject = encodeURIComponent('Refrigerant Usage Log');
+      const body = encodeURIComponent(
+        `Role: ${selectedRole}
+` +
+        `Employee: ${selectedEmployee}
+` +
+        `Invoice #: ${invoiceNum}
+` +
+        `Type: ${refrigType}
+` +
+        `Tank #: ${tankNum}
+` +
+        `Amount Used: ${amountUsed} lbs
+` +
+        `Signature: ${signature}`
+      );
+      window.location.href = `mailto:${recipients.join(',')}?subject=${subject}&body=${body}`;
+    });
+
+    function showStep(n) {
+      steps.forEach((s, i) => s.style.display = (i === n-1 ? 'block' : 'none'));
+    }
+    function populateEmployees() {
+      employeeEl.innerHTML = '<option value="" disabled selected>Select employee</option>';
+      for (let i = 1; i <= 15; i++) {
+        const opt = document.createElement('option');
+        opt.value = `Employee ${i}`;
+        opt.text = `Employee ${i}`;
+        employeeEl.add(opt);
+      }
+    }
+    function populateTanks() {
+      tankEl.innerHTML = '<option value="" disabled selected>Select tank #</option>';
+      for (let i = 1; i <= 10; i++) {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.text = `Tank ${i}`;
+        tankEl.add(opt);
+      }
+    }
+    function adjustAmount(delta) {
+      let val = parseFloat(amtEl.value) + delta;
+      val = Math.min(Math.max(val, 0), 25.5);
+      amtEl.value = val.toFixed(1);
+      amtEl.dispatchEvent(new Event('input'));
+    }
+    showStep(1);
+  </script>
+</body>
+</html>
