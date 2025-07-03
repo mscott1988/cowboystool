@@ -111,3 +111,46 @@ footer {
   z-index: 0;
   pointer-events: none;
 }
+/* LOGO PULSE ANIMATION */
+@keyframes pulse-logo {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.05); }
+}
+.logo {
+  animation: pulse-logo 6s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+/* BACKGROUND SVG FADE & PAN */
+@keyframes bg-fade-pan {
+  0%   { opacity: 0; transform: translate(0,0) scale(1); }
+  100% { opacity: 1; transform: translate(-10px,-10px) scale(1.02); }
+}
+.circuit-background svg,
+.circuit-background object {
+  animation: bg-fade-pan 30s ease-in-out infinite alternate;
+  width: 100%;
+  height: auto;
+}
+
+/* SMOOTH TRANSITIONS */
+.tile-button,
+.option-button,
+.btn {
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.tile-button:hover,
+.option-button:hover,
+.btn:hover {
+  transform: translateY(-2px);
+  background-color: #42593a;
+}
+
+/* MAIN CONTENT FADE-IN */
+main.container {
+  opacity: 0;
+  animation: fade-in 1s ease forwards 0.5s;
+}
+@keyframes fade-in {
+  to { opacity: 1; }
+}
