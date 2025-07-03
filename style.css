@@ -154,3 +154,10 @@ main.container {
 @keyframes fade-in {
   to { opacity: 1; }
 }
+
+/* Center testing banner inside the .container */
+main.container .testing-banner {
+  display: block;
+  text-align: center;
+  margin: 1rem 0;
+}
