@@ -8,25 +8,26 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- External circuit SVG background -->
-  <div class="circuit-background">
-    <img src="assets/circuit-background.svg" alt="Circuit Background" class="svg-bg" />
-  </div>
+  <!-- Background SVG -->
+  <div id="background-svg"></div>
 
-  <!-- Top legend bar -->
+  <!-- Top bar -->
   <header class="top-bar">
-    <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo" />
-    <div class="info-panels">
-      <div id="installs-today">Installs Today: <span id="installs-count">0</span></div>
-      <div id="date-time"></div>
-      <div id="weather"></div>
+    <div class="logo-wrapper">
+      <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo" />
+    </div>
+    <div class="info-panel">
+      <div class="info-item">Installs Today: <span id="installs-count">0</span></div>
+      <div class="info-item" id="date-time"></div>
+      <div class="info-item" id="weather"></div>
     </div>
   </header>
 
+  <!-- Tracker Form -->
   <main class="container">
     <h1>Refrigerant Tracker</h1>
     <form id="tracker-form">
-      <!-- Step 1: Role -->
+      <!-- Steps... -->
       <div class="step" id="step-1">
         <label for="role">Role:</label>
         <select id="role">
@@ -36,8 +37,6 @@
         </select>
         <button type="button" id="next-1" class="btn" disabled>Next</button>
       </div>
-
-      <!-- Step 2: Employee -->
       <div class="step" id="step-2" style="display:none">
         <label for="employee">Employee:</label>
         <select id="employee">
@@ -45,22 +44,16 @@
         </select>
         <button type="button" id="next-2" class="btn" disabled>Next</button>
       </div>
-
-      <!-- Step 3: Invoice Number -->
       <div class="step" id="step-3" style="display:none">
-        <label for="invoice">Invoice Number:</label>
+        <label for="invoice">Invoice #:</label>
         <input type="text" id="invoice" placeholder="Invoice #" />
         <button type="button" id="next-3" class="btn" disabled>Next</button>
       </div>
-
-      <!-- Step 4: Refrigerant Type -->
       <div class="step" id="step-4" style="display:none">
         <label>Refrigerant Type:</label>
         <button type="button" class="refrig-btn btn" data-type="R-410A">R-410A</button>
         <button type="button" class="refrig-btn btn" data-type="R-454B">R-454B</button>
       </div>
-
-      <!-- Step 5: Tank Number -->
       <div class="step" id="step-5" style="display:none">
         <label for="tank">Tank #:</label>
         <select id="tank">
@@ -68,8 +61,6 @@
         </select>
         <button type="button" id="next-5" class="btn" disabled>Next</button>
       </div>
-
-      <!-- Step 6: Amount Used -->
       <div class="step" id="step-6" style="display:none">
         <label>Amount Used (lbs):</label>
         <div class="quantity-control">
@@ -79,8 +70,6 @@
         </div>
         <button type="button" id="next-6" class="btn" disabled>Next</button>
       </div>
-
-      <!-- Step 7: Signature & Submit -->
       <div class="step" id="step-7" style="display:none">
         <label for="signature">Signature:</label>
         <input type="text" id="signature" placeholder="Type your name to sign" />
@@ -90,11 +79,10 @@
   </main>
 
   <script>
-    // Wizard logic
+    // Wizard logic as before...
     const steps = [...document.querySelectorAll('.step')];
     let selectedRole, selectedEmployee, invoiceNum, refrigType;
 
-    // Step handlers...
     const roleEl = document.getElementById('role');
     const next1 = document.getElementById('next-1');
     roleEl.addEventListener('change', () => next1.disabled = !roleEl.value);
