@@ -161,3 +161,12 @@ main.container .testing-banner {
   text-align: center;
   margin: 1rem 0;
 }
+
+
+/* Reduce gap under floating bar */
+.logo-container {
+  margin-top: 3rem;
+}
+main.container {
+  margin-top: 1rem !important;
+}
