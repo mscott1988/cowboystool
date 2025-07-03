@@ -8,44 +8,42 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- External circuit SVG background -->
+  <!-- Circuit SVG background -->
   <div class="circuit-background">
-    <img src="assets/circuit-background.svg" alt="Circuit Background" class="svg-bg" />
+    <img src="assets/circuit-background.svg" alt="Circuit Background" />
   </div>
 
-  <!-- Top legend bar -->
+  <!-- Top bar with logo and info -->
   <header class="top-bar">
     <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo" />
     <div class="info-panels">
-      <div id="installs-today">Installs Today: <span id="installs-count">0</span></div>
-      <div id="date-time"></div>
-      <div id="weather"></div>
+      <div class="info-item">Installs Today: <span id="installs-count">0</span></div>
+      <div class="info-item" id="date-time"></div>
+      <div class="info-item" id="weather"></div>
     </div>
   </header>
 
-  <!-- Dashboard grid -->
-  <main class="container">
-    <div class="grid">
-      <!-- Existing tiles -->
-      <div class="card">
-        <a href="internal-dashboard.html">
-          <h2>Internal Dashboard</h2>
-        </a>
-      </div>
-      <div class="card">
-        <a href="technician-pay-sheet.html">
-          <h2>Technician Pay Sheet</h2>
-        </a>
-      </div>
+  <!-- Loading and banner -->
+  <div class="loading">Loading time...</div>
+  <div class="banner">FOR TESTING PURPOSES ONLY</div>
 
-      <!-- New Refrigerant Tracker tile -->
-      <div class="card">
-        <a href="refrigerant-tracker.html">
-          <h2>Refrigerant Tracker</h2>
-        </a>
-      </div>
+  <!-- Dashboard content -->
+  <main class="container">
+    <h1 class="dashboard-title">Cowboys AC Dashboard</h1>
+    <div class="grid">
+      <div class="card"><a href="warranty-form.html"><h2>Warranty Form</h2></a></div>
+      <div class="card"><a href="installer-checklist.html"><h2>Installer Checklist</h2></a></div>
+      <div class="card"><a href="tech-map-out.html"><h2>Tech Map Out</h2></a></div>
+      <div class="card"><a href="parts-restock.html"><h2>Parts & Restock</h2></a></div>
+      <div class="card"><a href="pricing-catalog.html"><h2>Pricing Catalog</h2></a></div>
+      <div class="card"><a href="quick-quote.html"><h2>Quick Quote</h2></a></div>
+      <div class="card"><a href="technician-kiosk.html"><h2>Technician Kiosk</h2></a></div>
+      <div class="card"><a href="wiring-diagrams.html"><h2>Wiring Diagrams</h2></a></div>
+      <div class="card"><a href="refrigerant-tracker.html"><h2>Refrigerant Tracker</h2></a></div>
     </div>
   </main>
+
+  <footer class="footer">© 2025 Cowboys AC – All Rights Reserved</footer>
 
   <script src="script.js"></script>
 </body>
