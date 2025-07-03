@@ -1,16 +1,23 @@
-/* ------------------- HEADER & GAP FIX ------------------- */
+/* ===================================================
+   Cowboys AC Dashboard & Tracker — style.css
+   =================================================== */
+
+/* 1. Header height – adjust this once to perfectly clear your bar */
 :root {
-  --header-height: 60px; /* adjust to match your bar’s real height */
+  --header-height: 50px; /* ← tweak this value until content sits flush */
 }
 
+/* 2. Reset browser defaults */
 html, body {
   margin: 0;
   padding: 0;
 }
 
+/* 3. Fixed header */
 #floating-bar {
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: var(--header-height);
   background: rgba(7,21,40,0.95);
@@ -21,11 +28,12 @@ html, body {
   z-index: 1000;
 }
 
+/* 4. Push page content down by exactly the header height */
 body {
   padding-top: var(--header-height);
 }
 
-/* Center logo below header */
+/* 5. Centered logo container beneath header */
 .logo-container {
   display: flex;
   justify-content: center;
@@ -33,19 +41,51 @@ body {
   padding: 1rem 0;
 }
 
-/* Center testing banner inside container */
+/* 6. Main container centered & responsive */
+main.container {
+  max-width: 900px;
+  margin: 1rem auto;
+  padding: 0 1rem;
+}
+
+/* 7. Testing banner centered inside container */
 main.container .testing-banner {
   display: block;
   text-align: center;
   margin: 1rem 0;
 }
 
-/* Button/card hover transitions */
+/* 8. Dashboard grid tiles */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+/* 9. Wizard‐style button grids (tracker) */
+.wizard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* 10. Button & card styling */
 .tile-button,
 .option-button,
 .btn {
+  background: #324529;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
+
 .tile-button:hover,
 .option-button:hover,
 .btn:hover {
@@ -53,12 +93,24 @@ main.container .testing-banner {
   background-color: #42593a;
 }
 
-/* Logo pulse animation */
+/* 11. Logo pulse animation */
 @keyframes pulse-logo {
-  0%,100% { transform: scale(1); }
+  0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.05); }
 }
 .logo {
   animation: pulse-logo 6s ease-in-out infinite;
   transform-origin: center center;
+}
+
+/* 12. Background SVG fade & pan */
+@keyframes bg-fade-pan {
+  0%   { opacity: 0; transform: translate(0,0) scale(1); }
+  100% { opacity: 1; transform: translate(-10px,-10px) scale(1.02); }
+}
+.circuit-background svg,
+.circuit-background object {
+  animation: bg-fade-pan 30s ease-in-out infinite alternate;
+  width: 100%;
+  height: auto;
 }
