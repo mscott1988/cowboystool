@@ -46,5 +46,15 @@
     function updateDateTime() { document.getElementById('current-datetime').textContent = new Date().toLocaleString(); }
     setInterval(updateDateTime, 1000); updateDateTime();
   </script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const bar = document.getElementById('floating-bar');
+    if (bar) {
+      document.body.style.paddingTop = bar.offsetHeight + 'px';
+    }
+  });
+</script>
+
 </body>
 </html>
