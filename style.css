@@ -184,3 +184,15 @@ body {
 main.container {
   margin-top: 1rem !important;
 }
+
+/* ===== Top gap fix: unify under fixed bar ===== */
+body {
+  padding-top: 2.5rem !important; /* adjust as needed to the bar height */
+}
+.logo-container, .logo {
+  margin-top: 0 !important;
+}
+main.container {
+  margin-top: 0 !important;
+  padding-top: 2.5rem !important;
+}
