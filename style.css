@@ -147,52 +147,28 @@ footer {
 }
 
 /* MAIN CONTENT FADE-IN */
-main.container {
-  opacity: 0;
-  animation: fade-in 1s ease forwards 0.5s;
-}
+main.container { margin-top: 0; }
 @keyframes fade-in {
   to { opacity: 1; }
 }
 
 /* Center testing banner inside the .container */
-main.container .testing-banner {
-  display: block;
-  text-align: center;
-  margin: 1rem 0;
-}
+main.container { margin-top: 0; }
 
 
 /* Reduce gap under floating bar */
-.logo-container {
-  margin-top: 3rem;
-}
-main.container {
-  margin-top: 1rem !important;
-}
+.logo-container { margin-top: 0; }
+main.container { margin-top: 0; }
 
 /* Reduce top gap by shifting content up under fixed bar */
-body {
-  padding-top: 3.5rem; /* match the height of #floating-bar */
-}
+body { padding-top: 0; }
 
-.logo-container {
-  margin-top: 1rem !important; /* minimal space below bar */
-}
+.logo-container { margin-top: 0; }
 
 /* Ensure main container isn't pushed down too far */
-main.container {
-  margin-top: 1rem !important;
-}
+main.container { margin-top: 0; }
 
 /* ===== Top gap fix: unify under fixed bar ===== */
-body {
-  padding-top: 2.5rem !important; /* adjust as needed to the bar height */
-}
-.logo-container, .logo {
-  margin-top: 0 !important;
-}
-main.container {
-  margin-top: 0 !important;
-  padding-top: 2.5rem !important;
-}
+body { padding-top: 0; }
+.logo-container { margin-top: 0; }
+main.container { margin-top: 0; }

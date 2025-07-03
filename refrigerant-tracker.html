@@ -82,52 +82,5 @@ main.container { margin-top: 1rem !important; }
     </form>
   </main>
   <script src="script.js"></script>
-  <script>
-    function updateDateTime() { document.getElementById('current-datetime').textContent = new Date().toLocaleString(); }
-    setInterval(updateDateTime, 1000); updateDateTime();
-    document.getElementById('weather-info').textContent = '72°F Sunny';
-
-    const steps = [...document.querySelectorAll('.step')];
-    let selectedRole, selectedEmployee, invoiceNum, refrigType;
-    document.getElementById('role').addEventListener('change', e => {
-      document.getElementById('next-1').disabled = !e.target.value;
-    });
-    document.getElementById('next-1').onclick = () => { selectedRole = document.getElementById('role').value; showStep(2); populateEmployees(); };
-    function populateEmployees() { const emp = document.getElementById('employee'); emp.innerHTML = '<option value="" disabled selected>Select employee</option>'; for(let i=1;i<=15;i++){ const opt=document.createElement('option'); opt.value=`Employee ${i}`; opt.text=`Employee ${i}`; emp.add(opt);} }
-    document.getElementById('employee').addEventListener('change', e => { document.getElementById('next-2').disabled = !e.target.value; });
-    document.getElementById('next-2').onclick = () => { selectedEmployee = document.getElementById('employee').value; showStep(3); };
-    document.getElementById('invoice').addEventListener('input', e => { document.getElementById('next-3').disabled = !e.target.value.trim(); });
-    document.getElementById('next-3').onclick = () => { invoiceNum = document.getElementById('invoice').value.trim(); showStep(4); };
-    document.querySelectorAll('.refrig-btn').forEach(btn => btn.addEventListener('click', () => { refrigType = btn.dataset.type; showStep(5); populateTanks(); }));
-    function populateTanks() { const t=document.getElementById('tank'); t.innerHTML='<option value="" disabled selected>Select tank #</option>'; for(let i=1;i<=10;i++){ const opt=document.createElement('option'); opt.value=i; opt.text=`Tank ${i}`; t.add(opt);} }
-    document.getElementById('tank').addEventListener('change', e => { document.getElementById('next-5').disabled = !e.target.value; });
-    document.getElementById('next-5').onclick = () => showStep(6);
-    const amtEl=document.getElementById('amount'), next6=document.getElementById('next-6');
-    document.getElementById('increase').onclick = () => adjustAmount(0.5);
-    document.getElementById('decrease').onclick = () => adjustAmount(-0.5);
-    function adjustAmount(delta){ let val=parseFloat(amtEl.value)+delta; val=Math.min(Math.max(val,0),25.5); amtEl.value=val.toFixed(1); next6.disabled = !(amtEl.value>0); }
-    next6.onclick = () => showStep(7);
-    const sigEl=document.getElementById('signature'), subBtn=document.getElementById('submit-btn');
-    sigEl.addEventListener('input', e => { subBtn.disabled = !e.target.value.trim(); });
-    document.getElementById('tracker-form').addEventListener('submit', e => {
-      e.preventDefault();
-      const body = encodeURIComponent(
-        `Role: ${selectedRole}\nEmployee: ${selectedEmployee}\nInvoice #: ${invoiceNum}\nType: ${refrigType}\nTank #: ${document.getElementById('tank').value}\nAmount Used: ${amtEl.value} lbs\nSignature: ${sigEl.value.trim()}`
-      );
-      window.location.href = `mailto:warehouse@cowboysac.com,michael@cowboysac.com,alfonso@cowboysac.com?subject=${encodeURIComponent('Refrigerant Usage Log')}&body=${body}`;
-    });
-    function showStep(n) { steps.forEach((s,i)=>s.style.display=(i===n-1?'block':'none')); }
-    showStep(1);
-  </script>
-
-<script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const bar = document.getElementById('floating-bar');
-    if (bar) {
-      document.body.style.paddingTop = bar.offsetHeight + 'px';
-    }
-  });
-</script>
-
-</body>
+  </body>
 </html>
