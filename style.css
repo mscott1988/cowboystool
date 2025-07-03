@@ -170,3 +170,17 @@ main.container .testing-banner {
 main.container {
   margin-top: 1rem !important;
 }
+
+/* Reduce top gap by shifting content up under fixed bar */
+body {
+  padding-top: 3.5rem; /* match the height of #floating-bar */
+}
+
+.logo-container {
+  margin-top: 1rem !important; /* minimal space below bar */
+}
+
+/* Ensure main container isn't pushed down too far */
+main.container {
+  margin-top: 1rem !important;
+}
