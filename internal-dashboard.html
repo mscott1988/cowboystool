@@ -2,93 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cowboys AC Utilities (Internal Use Only)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cowboys AC Internal Dashboard</title>
   <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #0B1F3A;
-      color: white;
-      overflow: hidden;
-    }
-    .animated-background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-    .animated-background img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.1;
-    }
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #384036;
-      padding: 1rem 2rem;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 100;
-    }
-    .logo {
-      height: 50px;
-    }
-    #datetime {
-      font-size: 0.9rem;
-    }
-    .internal-grid {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: calc(100vh - 80px);
-      padding-top: 80px;
-      position: relative;
-      z-index: 1;
-    }
-    .tile {
-      background-color: #E63946;
-      padding: 1rem 2rem;
-      border-radius: 2rem;
-      color: white;
-      text-decoration: none;
-      font-size: 1.2rem;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .tile:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-  </style>
 </head>
-<body>
-  <div class="animated-background">
-    <img src="assets/circuit-background.png" alt="Circuit Background">
-  </div>
+<body class="internal-dashboard">
   <div class="top-bar">
-    <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo">
-    <div id="datetime"></div>
+    <img src="assets/logo-white.png" alt="Cowboys AC Logo" class="logo">
+    <div class="info">
+      <div id="installs-today">Installs Today: 0</div>
+      <div id="date-time"></div>
+      <div id="weather">Loading weather...</div>
+    </div>
   </div>
-  <div class="internal-grid">
-    <a href="technician-pay-sheet.html" class="tile">Technician Pay Sheet</a>
+  <div class="tile-grid">
+    <div class="tile">
+      <a href="https://mscott1988.github.io/technician-pay-sheet/" target="_blank">
+        <span class="icon">📋</span>
+        <p>Technician Pay Sheet</p>
+      </a>
+    </div>
+    <!-- Placeholder for future internal tools -->
   </div>
-  <script>
-    function updateDateTime() {
-      const now = new Date();
-      document.getElementById('datetime').textContent =
-        now.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' })
-        + ' ' + now.toLocaleTimeString();
-    }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
-  </script>
 </body>
 </html>
