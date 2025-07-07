@@ -60,7 +60,8 @@ body {
 }
 
 .logo {
-  max-width: 150px; width: auto; height: auto;
+  max-width: 200px; /* increased from 150px */
+  width: auto; height: auto;
 }
 
 /* Optional glow animation on logo */
@@ -80,7 +81,7 @@ body {
   }
 }
 
-/* Dashboard Title Animation */
+/* Title Animation */
 .dashboard-title {
   font-size: 2rem;
 }
