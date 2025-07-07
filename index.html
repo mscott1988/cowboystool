@@ -9,7 +9,7 @@
   <script src="script.js" defer></script>
 </head>
 <body>
-  <!-- Full-screen SVG background -->
+  <!-- Circuit-style SVG background -->
   <div id="background-svg"></div>
 
   <!-- Top floating bar -->
@@ -22,13 +22,15 @@
   </div>
 
   <!-- Centered, larger animated logo -->
-  <div class="logo-wrapper logo-container large-logo">
-    <img src="assets/cowboyslogo.png" alt="Cowboys AC Logo" class="logo">
+  <div class="logo-container">
+    <div class="logo-wrapper large-logo">
+      <img src="assets/cowboyslogo.png" alt="Cowboys AC Logo" class="logo">
+    </div>
   </div>
 
   <!-- Main Dashboard Grid -->
   <main class="container">
-    <h1 class="dashboard-title title-animated-from-side">Cowboys AC Dashboard</h1>
+    <h1 class="dashboard-title title-animated-from-left">Cowboys AC Dashboard</h1>
     <div class="dashboard-grid">
       <a class="tile-button" href="warranty.html">Warranty Form</a>
       <a class="tile-button" href="installer-checklist.html">Installer Checklist</a>
@@ -46,34 +48,3 @@
 </body>
 </html>
 
-<!-- internal-dashboard.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <title>Cowboys AC Utilities</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="style.css"/>
-  <script src="script.js" defer></script>
-</head>
-<body class="internal-dashboard">
-  <div id="background-svg"></div>
-
-  <div id="floating-bar">
-    <div class="info-panels">
-      <div>Installs Today: <span id="installs-count">0</span></div>
-      <div id="current-datetime"></div>
-      <div id="weather-info">Weather unavailable</div>
-    </div>
-    <a href="index.html" class="office-button">Back to Dashboard</a>
-  </div>
-
-  <div class="logo-wrapper logo-container large-logo">
-    <img src="assets/cowboyslogo.png" alt="Cowboys AC Logo" class="logo"/>
-  </div>
-
-  <!-- No main grid; internal tools only -->
-
-  <footer>© 2025 Cowboys AC – Internal Use Only</footer>
-</body>
-</html>
