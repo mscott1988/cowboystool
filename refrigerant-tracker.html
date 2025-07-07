@@ -68,5 +68,129 @@
     <!-- ... -->
   </main>
 
+
+
+    <form id="tracker-form">
+      <!-- Step 1: Role -->
+      <div class="wizard-grid step" id="step-1">
+        <button type="button" class="option-button" data-role="Technician">Technician</button>
+        <button type="button" class="option-button" data-role="Installer">Installer</button>
+      </div>
+
+      <!-- Step 2: Employee -->
+      <div class="wizard-grid step" id="step-2" style="display:none;"></div>
+
+      <!-- Step 3: Invoice -->
+      <div class="step" id="step-3" style="display:none; text-align:center;">
+        <input type="text" id="invoice" placeholder="Invoice #" style="padding:1rem; width:80%; max-width:300px; font-size:1rem;" />
+        <button type="button" id="next-3" class="btn" disabled>Next</button>
+      </div>
+
+      <!-- Step 4: Type -->
+      <div class="wizard-grid step" id="step-4" style="display:none;"></div>
+
+      <!-- Step 5: Tank -->
+      <div class="wizard-grid step" id="step-5" style="display:none;"></div>
+
+      <!-- Step 6: Amount -->
+      <div class="step" id="step-6" style="display:none; text-align:center;">
+        <div class="quantity-control" style="display:flex; gap:1rem; justify-content:center;">
+          <button type="button" id="decrease" class="btn">-</button>
+          <input type="number" id="amount" value="0" step="0.5" min="0" max="25.5" readonly />
+          <button type="button" id="increase" class="btn">+</button>
+        </div>
+        <button type="button" id="next-6" class="btn" disabled>Next</button>
+      </div>
+
+      <!-- Step 7: Signature -->
+      <div class="step" id="step-7" style="display:none; text-align:center;">
+        <input type="text" id="signature" placeholder="Type your name to sign" style="padding:1rem; width:80%; max-width:300px; font-size:1rem;" />
+        <button type="submit" id="submit-btn" class="btn" disabled>Submit</button>
+      </div>
+    </form>
+  </main>
+
   <footer>© 2025 Cowboys AC – All Rights Reserved</footer>
+
+  <script src="script.js"></script>
+  <script>
+    // Floating bar updates
+    function updateDateTime(){ document.getElementById('current-datetime').textContent = new Date().toLocaleString(); }
+    setInterval(updateDateTime,1000); updateDateTime();
+    document.getElementById('weather-info').textContent = '72°F Sunny';
+
+    // Wizard logic
+    const steps = ['step-1','step-2','step-3','step-4','step-5','step-6','step-7'];
+    let selectedRole, selectedEmployee, invoiceNum, refrigType, selectedTank;
+
+    function show(id) {
+      steps.forEach(s => {
+        const el = document.getElementById(s);
+        el.style.display = (s === id ? (['step-1','step-2','step-4','step-5'].includes(s) ? 'grid' : 'block') : 'none');
+      });
+    }
+
+    // Step 1: Role
+    document.querySelectorAll('#step-1 .option-button').forEach(btn => {
+      btn.onclick = () => {
+        selectedRole = btn.dataset.role;
+        const grid = document.getElementById('step-2'); grid.innerHTML = '';
+        for (let i = 1; i <= 15; i++) {
+          const b = document.createElement('button');
+          b.type = 'button'; b.className = 'option-button';
+          b.textContent = `Employee ${i}`;
+          b.onclick = () => { selectedEmployee = b.textContent; show('step-3'); };
+          grid.appendChild(b);
+        }
+        show('step-2');
+      };
+    });
+
+    // Step 3: Invoice
+    const inv = document.getElementById('invoice'), n3 = document.getElementById('next-3');
+    inv.oninput = () => n3.disabled = !inv.value.trim();
+    n3.onclick = () => {
+      invoiceNum = inv.value.trim();
+      const grid = document.getElementById('step-4'); grid.innerHTML = '';
+      ['R-410A','R-454B'].forEach(type => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'option-button'; b.textContent = type;
+        b.onclick = () => {
+          refrigType = type;
+          const tgrid = document.getElementById('step-5'); tgrid.innerHTML = '';
+          for (let i = 1; i <= 10; i++) {
+            const tb = document.createElement('button');
+            tb.type = 'button'; tb.className = 'option-button'; tb.textContent = `Tank ${i}`;
+            tb.onclick = () => { selectedTank = i; show('step-6'); };
+            tgrid.appendChild(tb);
+          }
+          show('step-5');
+        };
+        grid.appendChild(b);
+      });
+      show('step-4');
+    };
+
+    // Step 6: Amount
+    const amt = document.getElementById('amount'), n6 = document.getElementById('next-6');
+    document.getElementById('increase').onclick = () => adjustAmt(0.5);
+    document.getElementById('decrease').onclick = () => adjustAmt(-0.5);
+    function adjustAmt(delta) { let v = parseFloat(amt.value) + delta; v = Math.min(Math.max(v, 0), 25.5); amt.value = v.toFixed(1); n6.disabled = !(v > 0); }
+    n6.onclick = () => show('step-7');
+
+    // Step 7: Signature
+    const sig = document.getElementById('signature'), sb = document.getElementById('submit-btn');
+    sig.oninput = () => sb.disabled = !sig.value.trim();
+    document.getElementById('tracker-form').onsubmit = e => {
+      e.preventDefault();
+      const body = encodeURIComponent(
+        `Role: ${selectedRole}\nEmployee: ${selectedEmployee}\nInvoice #: ${invoiceNum}\nType: ${refrigType}\nTank #: ${selectedTank}\nAmount Used: ${amt.value} lbs\nSignature: ${sig.value.trim()}`
+      );
+      location.href = `mailto:warehouse@cowboysac.com,michael@cowboysac.com,alfonso@cowboysac.com?subject=${encodeURIComponent('Refrigerant Usage Log')}&body=${body}`;
+    };
+
+    // Initialize
+    show('step-1');
+  </script>
 </body>
+</html>
