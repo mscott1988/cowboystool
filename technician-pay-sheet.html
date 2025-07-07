@@ -55,6 +55,7 @@
       color: white;
       cursor: pointer;
       font-size: 1rem;
+      margin-right: 10px;
     }
     .card {
       background-color: #334232;
@@ -74,8 +75,8 @@
       background: #1f2a2f;
       color: white;
     }
-    #pdfButton {
-      margin-top: 15px;
+    #results {
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -100,6 +101,7 @@
           ← Back to Dashboard
         </button>
       </div>
+
       <h2>Technician Pay Sheet</h2>
       <form id="paySheetForm">
         <label for="employee">Employee Name</label>
@@ -124,39 +126,36 @@
         <label for="otherCosts">Other Costs</label>
         <input type="number" id="otherCosts" name="otherCosts" required>
 
-        <button type="button" id="pdfButton" class="button">Generate PDF</button>
+        <div style="margin-top:20px;">
+          <button type="button" id="processButton" class="button">Process</button>
+          <button type="button" id="pdfButton" class="button">Generate PDF</button>
+        </div>
       </form>
 
-      <div id="results" style="margin-top:20px;"></div>
+      <div id="results"></div>
     </div>
   </div>
 
   <script>
-    function updateDateTime() {
-      const now = new Date();
-      document.getElementById('datetime').textContent =
-        now.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' })
-        + ' ' + now.toLocaleTimeString();
-    }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
+    // container for last calculation
+    let lastCalc = {};
 
-    document.getElementById('pdfButton').addEventListener('click', function() {
-      const installPrice = parseFloat(document.getElementById('installPrice').value);
-      const permitCost  = parseFloat(document.getElementById('permitCost').value);
-      const equipmentCost = parseFloat(document.getElementById('equipmentCost').value);
-      const otherCosts  = parseFloat(document.getElementById('otherCosts').value);
-      const paymentType = document.getElementById('paymentType').value;
-      const employee    = document.getElementById('employee').value;
+    function calculate() {
+      const installPrice   = parseFloat(document.getElementById('installPrice').value) || 0;
+      const permitCost     = parseFloat(document.getElementById('permitCost').value) || 0;
+      const equipmentCost  = parseFloat(document.getElementById('equipmentCost').value) || 0;
+      const otherCosts     = parseFloat(document.getElementById('otherCosts').value) || 0;
+      const paymentType    = document.getElementById('paymentType').value;
+      const employee       = document.getElementById('employee').value;
 
       const officeExpenses = 0.05 * installPrice;
       let paymentFee = 0;
       if (paymentType === 'credit')  paymentFee = 0.033 * installPrice;
       else if (paymentType === 'finance') paymentFee = 0.08 * installPrice;
 
-      const totalCosts = permitCost + equipmentCost + otherCosts + officeExpenses + paymentFee;
-      const profit     = installPrice - totalCosts;
-      const profitMargin = (profit/installPrice)*100;
+      const totalCosts    = permitCost + equipmentCost + otherCosts + officeExpenses + paymentFee;
+      const profit        = installPrice - totalCosts;
+      const profitMargin  = (profit / installPrice) * 100;
 
       let commissionRate = 0.05;
       if (profitMargin >= 55) commissionRate = 0.10;
@@ -164,7 +163,10 @@
 
       const commission = installPrice * commissionRate;
 
-      const results = `
+      lastCalc = { employee, installPrice, totalCosts, profit, profitMargin, commission };
+
+
+      document.getElementById('results').innerHTML = `
         <strong>Employee:</strong> ${employee}<br>
         <strong>Install Price:</strong> $${installPrice.toFixed(2)}<br>
         <strong>Total Costs:</strong> $${totalCosts.toFixed(2)}<br>
@@ -173,9 +175,10 @@
         <strong>Commission Rate:</strong> ${(commissionRate*100).toFixed(0)}%<br>
         <strong>Commission:</strong> $${commission.toFixed(2)}
       `;
-      document.getElementById('results').innerHTML = results;
+    }
 
-      // PDF
+    function generatePDF() {
+      const { employee, installPrice, totalCosts, profit, profitMargin, commission } = lastCalc;
       const doc = new window.jspdf.jsPDF();
       doc.text(
         `Technician Pay Sheet\n\n${employee}\nInstall: $${installPrice.toFixed(2)}\n`+
@@ -184,7 +187,31 @@
         10, 10
       );
       doc.save(`${employee.replace(/\s+/g,'_')}_pay_sheet.pdf`);
+    }
+
+    // hook up buttons
+    document.getElementById('processButton').addEventListener('click', calculate);
+    document.getElementById('pdfButton').    addEventListener('click', () => {
+      calculate();
+      generatePDF();
     });
+
+    // auto-recalculate on field change
+    ['employee','installPrice','permitCost','equipmentCost','otherCosts','paymentType']
+      .forEach(id => {
+        const ev = (id==='paymentType') ? 'change' : 'input';
+        document.getElementById(id).addEventListener(ev, calculate);
+      });
+
+    // live date/time
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById('datetime').textContent =
+        now.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' })
+        + ' ' + now.toLocaleTimeString();
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
