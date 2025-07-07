@@ -1,0 +1,35 @@
+/* assets/css/logo-animation.css */
+
+/* Wrapper for every page’s logo */
+.logo-wrapper {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(-20px) scale(1);
+  animation:
+    slideIn 0.8s ease-out forwards,
+    pulse   2.5s ease-in-out 0.8s infinite alternate;
+}
+
+/* Slide-down + fade in */
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Gentle scale pulse */
+@keyframes pulse {
+  from { transform: translateY(0) scale(1);    }
+  to   { transform: translateY(0) scale(1.05); }
+}
+
+/* Logo image styling */
+.logo-wrapper .logo {
+  display: block;
+  max-width: 150px;
+  height: auto;
+  filter:
+    drop-shadow(0 4px 12px rgba(0,0,0,0.5))
+    drop-shadow(0 0 8px rgba(255,255,255,0.2));
+}
