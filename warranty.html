@@ -5,9 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cowboys AC Warranty Form</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Center main content */
+    main.container { display: flex; flex-direction: column; align-items: center; }
+    .wizard-step { max-width: 500px; width: 100%; animation: fade-in 0.4s ease; }
+    /* iPad-friendly buttons */
+    .option-button, .btn { padding: 1.5rem 2rem; font-size: 1.25rem; border-radius: 0.75rem; }
+    /* Animation for step transitions */
+    @keyframes fade-in { from { opacity: 0; transform: translateY(10px);} to { opacity:1; transform: translateY(0);} }
+    .wizard-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap:1rem; margin-bottom:2rem; }
+    .wizard-nav { display:flex; justify-content: space-between; margin-top:1rem; }
+    .wizard-nav .btn { flex: 1; margin: 0 .5rem; }
+  </style>
 </head>
 <body>
-  <!-- Fixed header matching dashboard -->
   <div id="floating-bar">
     <div class="info-panels-left">
       <div>Installs Today: <span id="installs-count">0</span></div>
@@ -17,17 +28,15 @@
       <div id="weather-info">72°F Sunny</div>
     </div>
     <div class="header-buttons">
-      <a href="index.html" class="btn">Return to Dashboard</a>
+      <a href="index.html" class="btn">Dashboard</a>
       <a href="internal-dashboard.html" class="btn">Office Use Only</a>
     </div>
   </div>
 
-  <!-- Centered logo -->
   <div class="logo-container">
-    <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo" />
+    <img src="assets/cowboyslogo.png" alt="Cowboys AC Logo" class="logo" />
   </div>
 
-  <!-- Warranty form wizard -->
   <main class="container">
     <h1 class="dashboard-title">Warranty Form</h1>
     <form id="warrantyForm">
@@ -36,14 +45,16 @@
         <h2>Step 1: Employee & Customer Info</h2>
         <label>Employee</label>
         <div class="wizard-grid">
-          <button type="button" class="option-button" data-step="1" data-employee="Employee 1">Employee 1</button>
-          <button type="button" class="option-button" data-step="1" data-employee="Employee 2">Employee 2</button>
+          <button type="button" class="option-button" data-select="employee" data-value="Employee 1">Employee 1</button>
+          <button type="button" class="option-button" data-select="employee" data-value="Employee 2">Employee 2</button>
         </div>
         <label>Customer Name</label>
         <input type="text" id="customerName" placeholder="Customer Name" />
-        <button type="button" class="btn next-btn">Next</button>
+        <div class="wizard-nav">
+          <span></span>
+          <button type="button" class="btn next-btn">Next</button>
+        </div>
       </div>
-
       <!-- Step 2 -->
       <div class="wizard-step" id="step-2" style="display:none;">
         <h2>Step 2: Equipment Details</h2>
@@ -56,14 +67,22 @@
           <button type="button" class="btn next-btn">Next</button>
         </div>
       </div>
-
       <!-- Step 3 -->
       <div class="wizard-step" id="step-3" style="display:none;">
         <h2>Step 3: Return & Upload</h2>
         <label>Return to Manufacturer?</label>
         <div class="wizard-grid">
-          <button type="button" class="option-button" data-return="No">No</button>
-          <button type="button" class="option-button" data-return="Yes">Yes</button>
+          <button type="button" class="option-button" data-select="return" data-value="No">No</button>
+          <button type="button" class="option-button" data-select="return" data-value="Yes">Yes</button>
+        </div>
+        <!-- Detailed list appears under Yes -->
+        <div id="return-list" style="display:none; margin-bottom:2rem;">
+          <p>Select Drop-Off Location:</p>
+          <div class="wizard-grid">
+            <button type="button" class="option-button" data-select="location" data-value="Century HVAC">Century HVAC</button>
+            <button type="button" class="option-button" data-select="location" data-value="Robert Madden">Robert Madden</button>
+            <button type="button" class="option-button" data-select="location" data-value="Inseco">Inseco</button>
+          </div>
         </div>
         <label>Upload Photo</label>
         <input type="file" id="photoUpload" />
@@ -72,7 +91,6 @@
           <button type="button" class="btn next-btn">Next</button>
         </div>
       </div>
-
       <!-- Step 4 -->
       <div class="wizard-step" id="step-4" style="display:none;">
         <h2>Step 4: Review & Signature</h2>
@@ -88,40 +106,36 @@
 
   <footer>© 2025 Cowboys AC – All Rights Reserved</footer>
 
-  <script src="script.js"></script>
   <script>
-    // Floating bar updates
+    // Header updates
     function updateDateTime(){ document.getElementById('current-datetime').textContent = new Date().toLocaleString(); }
     setInterval(updateDateTime,1000); updateDateTime();
 
-    // Wizard navigation logic
-    const steps = ['step-1','step-2','step-3','step-4'];
-    let current = 0;
-    function showStep(index) {
-      steps.forEach((id,i) => document.getElementById(id).style.display = i===index ? 'block':'none');
-      current = index;
-    }
+    // Wizard
+    const steps=['step-1','step-2','step-3','step-4']; let current=0;
+    function showStep(i){ steps.forEach((id,idx)=>{ document.getElementById(id).style.display = idx===i?'block':'none'; }); current=i; }
 
-    document.querySelectorAll('.next-btn').forEach(btn => btn.onclick = () => showStep(current+1));
-    document.querySelectorAll('.prev-btn').forEach(btn => btn.onclick = () => showStep(current-1));
+    document.querySelectorAll('.next-btn').forEach(b=>b.onclick=()=>showStep(current+1));
+    document.querySelectorAll('.prev-btn').forEach(b=>b.onclick=()=>showStep(current-1));
 
-    // Option-button highlights
-    document.querySelectorAll('.option-button').forEach(btn => {
-      btn.onclick = () => {
-        const parent = btn.closest('.wizard-step');
-        parent.querySelectorAll('.option-button').forEach(b=>b.classList.remove('selected'));
-        btn.classList.add('selected');
+    // Option selections
+    const selections={};
+    document.querySelectorAll('.option-button').forEach(b=>{
+      b.onclick=()=>{
+        const sel=b.dataset.select, val=b.dataset.value;
+        selections[sel]=val;
+        // highlight
+        document.querySelectorAll(`.option-button[data-select="${sel}"]`).forEach(el=>el.classList.remove('selected'));
+        b.classList.add('selected');
+        if(sel==='return'){
+          document.getElementById('return-list').style.display = (val==='Yes'?'block':'none');
+        }
       };
     });
 
-    // Form submit
-    document.getElementById('warrantyForm').onsubmit = e => {
-      e.preventDefault();
-      // handle pdf/email logic here
-      alert('Form submitted!');
-    };
+    // Form submit stub
+    document.getElementById('warrantyForm').onsubmit=e=>{ e.preventDefault(); console.log(selections); alert('Submitted'); };
 
-    // Init
     showStep(0);
   </script>
 </body>
