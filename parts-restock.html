@@ -6,38 +6,22 @@
   <title>Parts Restock – Cowboys AC</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* Center layout like dashboard */
-    main.container { display: flex; flex-direction: column; align-items: center; }
-    .dashboard-title { margin-bottom: 1.5rem; }
-    .wizard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; width: 100%; max-width: 800px; margin-bottom: 2rem; }
-    .part-button {
-      background: #324529;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-      cursor: pointer;
-      position: relative;
-    }
-    .part-button .count {
-      position: absolute;
-      top: 4px;
-      right: 8px;
-      background: #E63946;
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-    }
-    .footer-nav a { margin-top: 2rem; }
+    /* Center layout */
+    main.container { display:flex; flex-direction:column; align-items:center; }
+    .dashboard-title { margin-bottom:1.5rem; }
+    .wizard-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:1rem; width:100%; max-width:800px; margin-bottom:2rem; }
+    .part-button { position:relative; background:#324529; color:#fff; border:none; border-radius:8px; padding:0.75rem 1rem; font-size:1rem; cursor:pointer; }
+    /* Selected list styling */
+    .selected-list { width:100%; max-width:800px; margin-bottom:2rem; }
+    .selected-list h2 { margin-bottom:1rem; }
+    .selected-item { display:flex; justify-content:space-between; align-items:center; padding:0.5rem; border-bottom:1px solid #ccc; }
+    .selected-item span { flex:1; }
+    .qty-controls { display:flex; gap:0.5rem; }
+    .qty-controls button { background:#42593a; color:#fff; border:none; border-radius:4px; padding:0.5rem; font-size:1rem; cursor:pointer; }
+    .qty-controls input { width:50px; text-align:center; border:none; font-size:1rem; }
   </style>
 </head>
 <body>
-  <!-- Floating header -->
   <div id="floating-bar">
     <div class="info-panels-left">
       <div>Installs Today: <span id="installs-count">0</span></div>
@@ -51,69 +35,40 @@
       <a href="internal-dashboard.html" class="btn">Office Use Only</a>
     </div>
   </div>
-
-  <!-- Logo -->
   <div class="logo-container">
     <img src="assets/cowboyslogo.png" alt="Cowboys AC Logo" class="logo" />
   </div>
-
   <main class="container">
     <h1 class="dashboard-title">Parts Restock</h1>
-    <p>Select parts to increment quantity:</p>
-    <div class="wizard-grid" id="parts-grid">
-      <!-- JS will populate buttons -->
+    <p>Select parts to add:</p>
+    <div class="wizard-grid" id="parts-grid"></div>
+    <div class="selected-list" id="selected-list">
+      <h2>Selected Parts</h2>
+      <div id="items-container"></div>
     </div>
-    <div class="wizard-nav">
-      <button id="submit-btn" class="btn">Submit Request</button>
-    </div>
+    <button id="submit-btn" class="btn">Submit Request</button>
     <div class="footer-nav">
       <a href="index.html" class="btn">← Return to Main Menu</a>
     </div>
   </main>
-
   <footer>© 2025 Cowboys AC – All Rights Reserved</footer>
-
   <script>
-    // Parts list
     const parts = [
-      "Capacitor (35/5)", "Capacitor (40/5)", "Capacitor (45/5)", "Capacitor (55/5)",
-      "Contactor (1 Pole)", "Contactor (2 Pole)", "Hard Start Kit", "TXV Valve",
-      "Drain Line", "Line Set 3/8 x 3/4", "Line Set 3/8 x 7/8", "Condenser Pad",
-      "Disconnect Box", "Whip", "Float Switch", "Thermostat (Non-Programmable)",
-      "Thermostat (WiFi)", "PVC Pipe (3/4 inch)", "Tape", "Zip Ties", "Refrigerant (R410A)"
+      "Capacitor (35/5)","Capacitor (40/5)","Capacitor (45/5)","Capacitor (55/5)",
+      "Contactor (1 Pole)","Contactor (2 Pole)","Hard Start Kit","TXV Valve",
+      "Drain Line","Line Set 3/8 x 3/4","Line Set 3/8 x 7/8","Condenser Pad",
+      "Disconnect Box","Whip","Float Switch","Thermostat (Non-Programmable)",
+      "Thermostat (WiFi)","PVC Pipe (3/4 inch)","Tape","Zip Ties","Refrigerant (R410A)"
     ];
-    const grid = document.getElementById('parts-grid');
     const counts = {};
-    parts.forEach(part => {
-      counts[part] = 0;
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'part-button';
-      btn.innerText = part;
-      const countBadge = document.createElement('div');
-      countBadge.className = 'count';
-      countBadge.innerText = '0';
-      btn.appendChild(countBadge);
-      btn.onclick = () => {
-        counts[part]++;
-        countBadge.innerText = counts[part];
-      };
-      grid.appendChild(btn);
-    });
-
-    document.getElementById('submit-btn').onclick = () => {
-      const entries = Object.entries(counts).filter(([p,q]) => q>0);
-      if (!entries.length) return alert('No parts selected');
-      let body = 'Parts Restock Request:\n';
-      entries.forEach(([p,q]) => body += `${p} - Qty: ${q}\n`);
-      const mailto = `mailto:warehouse@cowboysac.com?subject=Parts Restock Request&body=${encodeURIComponent(body)}`;
-      window.location.href = mailto;
-    };
-
-    // Header updates
-    function updateDateTime(){ document.getElementById('current-datetime').textContent = new Date().toLocaleString(); }
-    setInterval(updateDateTime,1000); updateDateTime();
-    document.getElementById('weather-info').textContent = '72°F Sunny';
+    const grid = document.getElementById('parts-grid');
+    const itemsContainer = document.getElementById('items-container');
+    parts.forEach(part=>{ counts[part]=0; const btn=document.createElement('button'); btn.type='button'; btn.className='part-button'; btn.textContent=part; btn.onclick=()=>{ counts[part]++; renderList(); }; grid.appendChild(btn); });
+    function renderList(){ itemsContainer.innerHTML=''; Object.entries(counts).forEach(([part,qty])=>{ if(qty>0){ const div=document.createElement('div'); div.className='selected-item'; div.innerHTML=`<span>${part}</span><div class="qty-controls"><button data-part="${part}" data-action="decrease">-</button><input type="text" value="${qty}" readonly /><button data-part="${part}" data-action="increase">+</button></div>`; itemsContainer.appendChild(div); }}); document.querySelectorAll('.qty-controls button').forEach(b=>b.onclick=()=>{ const p=b.dataset.part; counts[p] += (b.dataset.action==='increase'?1:-1); if(counts[p]<0)counts[p]=0; renderList(); }); }
+    document.getElementById('submit-btn').onclick=()=>{ const entries=Object.entries(counts).filter(([p,q])=>q>0); if(!entries.length){alert('No parts selected');return;} let body='Parts Restock Request:\n'; entries.forEach(([p,q])=>body+=`${p} - Qty: ${q}\n`); window.location.href=`mailto:warehouse@cowboysac.com?subject=Parts Restock Request&body=${encodeURIComponent(body)}`; };
+    function updateDateTime(){ document.getElementById('current-datetime').textContent=new Date().toLocaleString(); }
+    setInterval(updateDateTime,1000); updateDateTime(); document.getElementById('weather-info').textContent='72°F Sunny';
   </script>
 </body>
 </html>
+
