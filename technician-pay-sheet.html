@@ -40,22 +40,22 @@
       <div class="card">
         <form id="paySheetForm">
           <label for="salePrice">Sale Price</label>
-          <input type="number" id="salePrice" name="salePrice" value="0" required />
-
-          <label for="permitCost">Permit Cost</label>
-          <input type="number" id="permitCost" name="permitCost" value="100" required />
+          <input type="number" id="salePrice" value="0" required />
 
           <label for="equipmentCost">Equipment Cost</label>
-          <input type="number" id="equipmentCost" name="equipmentCost" required />
+          <input type="number" id="equipmentCost" required />
+
+          <label for="permitCost">Permit Cost</label>
+          <input type="number" id="permitCost" value="100" required />
 
           <label for="supplyCost">Supply House Total Cost (Home Depot, Lowes, etc.)</label>
-          <input type="number" id="supplyCost" name="supplyCost" required />
+          <input type="number" id="supplyCost" required />
 
           <label for="installerCost">Installer's Cost</label>
-          <input type="number" id="installerCost" name="installerCost" required />
+          <input type="number" id="installerCost" required />
 
           <label for="paymentType">Payment Type</label>
-          <select id="paymentType" name="paymentType">
+          <select id="paymentType">
             <option value="cash">Cash</option>
             <option value="credit">Credit Card</option>
             <option value="finance">Financing</option>
@@ -72,43 +72,51 @@
   </main>
 
   <script>
-    // script.js handles background, datetime, weather
+    // calculation logic
     let lastCalc = {};
     function calculate() {
       const salePrice     = parseFloat(document.getElementById('salePrice').value) || 0;
-      const permitCost    = parseFloat(document.getElementById('permitCost').value) || 0;
       const equipmentCost = parseFloat(document.getElementById('equipmentCost').value) || 0;
+      const permitCost    = parseFloat(document.getElementById('permitCost').value) || 0;
       const supplyCost    = parseFloat(document.getElementById('supplyCost').value) || 0;
       const installerCost = parseFloat(document.getElementById('installerCost').value) || 0;
       const paymentType   = document.getElementById('paymentType').value;
       const employeeElem  = document.getElementById('employee');
       const employee      = employeeElem ? employeeElem.value : '';
 
-      // Office expenses: 5% of total sale price
-      const officeExpenses = 0.05 * salePrice;
+      // Net sale after equipment
+      const netSale       = salePrice - equipmentCost;
+      // Office expenses: 5% of sale price
+      const officeExpenses= 0.05 * salePrice;
+      // Payment fee
       let paymentFee = 0;
       if (paymentType === 'credit') paymentFee = 0.033 * salePrice;
       else if (paymentType === 'finance') paymentFee = 0.08 * salePrice;
 
-      const totalCosts    = permitCost + equipmentCost + supplyCost + installerCost + officeExpenses + paymentFee;
-      const profit        = salePrice - totalCosts;
-      const profitMargin  = salePrice ? (profit / salePrice) * 100 : 0;
+      // Total other costs (excluding equipment)
+      const otherCosts    = permitCost + supplyCost + installerCost + officeExpenses + paymentFee;
+      // Profit = net sale - other costs
+      const profit        = netSale - otherCosts;
+      const profitMargin  = netSale ? (profit / netSale) * 100 : 0;
+      // Commission rate
       let commissionRate = 0.05;
       if (profitMargin >= 55) commissionRate = 0.10;
       else if (profitMargin >= 50) commissionRate = 0.08;
-      const commission    = salePrice * commissionRate;
+      const commission    = netSale * commissionRate;
 
-      lastCalc = { salePrice, permitCost, equipmentCost, supplyCost, installerCost, officeExpenses, paymentFee, totalCosts, profit, profitMargin, commission, employee };
+      lastCalc = { salePrice, equipmentCost, netSale, permitCost, supplyCost, installerCost, officeExpenses, paymentFee, otherCosts, profit, profitMargin, commission, employee };
 
+      // render results
       document.getElementById('results').innerHTML = `
         <p><strong>Sale Price:</strong> $${salePrice.toFixed(2)}</p>
-        <p><strong>Permit Cost:</strong> $${permitCost.toFixed(2)}</p>
         <p><strong>Equipment Cost:</strong> $${equipmentCost.toFixed(2)}</p>
+        <p><strong>Net Sale (Sale - Equipment):</strong> $${netSale.toFixed(2)}</p>
+        <p><strong>Permit Cost:</strong> $${permitCost.toFixed(2)}</p>
         <p><strong>Supply Cost:</strong> $${supplyCost.toFixed(2)}</p>
         <p><strong>Installer's Cost:</strong> $${installerCost.toFixed(2)}</p>
         <p><strong>Office Expenses (5% of Sale Price):</strong> $${officeExpenses.toFixed(2)}</p>
         <p><strong>Payment Fee:</strong> $${paymentFee.toFixed(2)}</p>
-        <p><strong>Total Costs:</strong> $${totalCosts.toFixed(2)}</p>
+        <p><strong>Total Other Costs:</strong> $${otherCosts.toFixed(2)}</p>
         <p><strong>Profit:</strong> $${profit.toFixed(2)}</p>
         <p><strong>Profit Margin:</strong> ${profitMargin.toFixed(2)}%</p>
         <p><strong>Commission (${(commissionRate*100).toFixed(0)}%):</strong> $${commission.toFixed(2)}</p>
@@ -118,50 +126,46 @@
     function generatePDF() {
       calculate();
       const doc = new window.jspdf.jsPDF();
-      // Header: logo, title, date
-      doc.addImage('assets/Cowboys_Logo.png', 'PNG', 10, 10, 40, 20);
+      // header
+      doc.addImage('assets/Cowboys_Logo.png','PNG',10,10,40,20);
       doc.setFontSize(16);
       doc.text('Technician Pay Sheet', 60, 20);
       doc.setFontSize(10);
-      doc.text(new Date().toLocaleString(), 200, 10, { align: 'right' });
+      doc.text(new Date().toLocaleString(), 200, 10, { align:'right' });
 
-      // Body
-      let y = 40;
-      const fields = [
+      // body
+      let y=40;
+      const fields=[
         ['Sale Price', lastCalc.salePrice],
-        ['Permit Cost', lastCalc.permitCost],
         ['Equipment Cost', lastCalc.equipmentCost],
+        ['Net Sale', lastCalc.netSale],
+        ['Permit Cost', lastCalc.permitCost],
         ['Supply Cost', lastCalc.supplyCost],
-        ['Installer\'s Cost', lastCalc.installerCost],
+        ['Installer Cost', lastCalc.installerCost],
         ['Office Expenses', lastCalc.officeExpenses],
         ['Payment Fee', lastCalc.paymentFee],
-        ['Total Costs', lastCalc.totalCosts],
+        ['Total Other Costs', lastCalc.otherCosts],
         ['Profit', lastCalc.profit],
         ['Profit Margin', lastCalc.profitMargin + '%'],
         ['Commission', lastCalc.commission]
       ];
       doc.setFontSize(12);
-      fields.forEach(([label, value]) => {
-        const text = typeof value === 'number' ? `$${value.toFixed(2)}` : value;
-        doc.text(`${label}: ${text}`, 10, y);
-        y += 8;
+      fields.forEach(([label,val])=>{
+        const text = typeof val==='number'?`$${val.toFixed(2)}`:val;
+        doc.text(`${label}: ${text}`,10,y);
+        y+=8;
       });
-
-      // Footer
+      // footer
       doc.setFontSize(9);
-      doc.text('© 2025 Cowboys AC Heating', 200, 290, { align: 'right' });
-
+      doc.text('© 2025 Cowboys AC Heating', 200,290,{ align:'right' });
       doc.save(`pay_sheet_${new Date().toISOString().slice(0,10)}.pdf`);
     }
-
-    document.getElementById('processButton').addEventListener('click', calculate);
-    document.getElementById('pdfButton').addEventListener('click', generatePDF);
-    
-    ['salePrice','permitCost','equipmentCost','supplyCost','installerCost','paymentType']
-      .forEach(id => {
-        const event = id === 'paymentType' ? 'change' : 'input';
-        document.getElementById(id).addEventListener(event, calculate);
-      });
+    document.getElementById('processButton').addEventListener('click',calculate);
+    document.getElementById('pdfButton').addEventListener('click',generatePDF);
+    ['salePrice','equipmentCost','permitCost','supplyCost','installerCost','paymentType'].forEach(id=>{
+      const e=(id==='paymentType'?'change':'input');
+      document.getElementById(id).addEventListener(e,calculate);
+    });
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
