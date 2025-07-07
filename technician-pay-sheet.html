@@ -7,20 +7,19 @@
   <link rel="stylesheet" href="style.css"/>
   <script defer src="script.js"></script>
   <style>
-    /* Inline styles kept minimal; global CSS handles most */
+    /* Minimal inline styling; global CSS covers the rest */
     .card { background:#334232; padding:20px; border-radius:12px; width:600px; margin:auto; }
     .button { background:#E63946; color:#fff; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; margin-right:10px; }
     label,input,select { display:block; width:100%; margin-bottom:10px; }
     input,select { background:#1f2a2f; color:#fff; border:none; border-radius:6px; padding:8px; }
-    #results p { margin:5px 0; }
     .actions { text-align:right; margin-top:20px; }
+    #results p { margin:5px 0; }
   </style>
 </head>
 <body>
   <!-- Circuit SVG background -->
   <div id="background-svg"></div>
-
-  <!-- Top floating bar (identical to index.html) -->
+  <!-- Top floating bar -->
   <div id="floating-bar">
     <div class="info-panels-left">
       <div id="installs-count">Installs Today: 0</div>
@@ -30,26 +29,30 @@
       <div id="weather-info">Loading weather...</div>
     </div>
   </div>
-
-  <!-- Centered, constrained logo with optional glow -->
+  <!-- Logo -->
   <div class="logo-container">
     <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo logo-glow" />
   </div>
-
-  <!-- Main content container -->
+  <!-- Main content -->
   <main class="container">
     <h1 class="dashboard-title title-animated-from-left">Technician Pay Sheet</h1>
     <div class="dashboard-grid">
       <div class="card">
         <form id="paySheetForm">
-          <label for="employee">Employee Name</label>
-          <input type="text" id="employee" name="employee" required />
-
-          <label for="installPrice">Install Price</label>
-          <input type="number" id="installPrice" name="installPrice" value="1000" required />
+          <label for="salePrice">Sale Price</label>
+          <input type="number" id="salePrice" name="salePrice" value="0" required />
 
           <label for="permitCost">Permit Cost</label>
           <input type="number" id="permitCost" name="permitCost" value="100" required />
+
+          <label for="equipmentCost">Equipment Cost</label>
+          <input type="number" id="equipmentCost" name="equipmentCost" required />
+
+          <label for="supplyCost">Supply House Total Cost (Home Depot, Lowes, etc.)</label>
+          <input type="number" id="supplyCost" name="supplyCost" required />
+
+          <label for="installerCost">Installer's Cost</label>
+          <input type="number" id="installerCost" name="installerCost" required />
 
           <label for="paymentType">Payment Type</label>
           <select id="paymentType" name="paymentType">
@@ -57,12 +60,6 @@
             <option value="credit">Credit Card</option>
             <option value="finance">Financing</option>
           </select>
-
-          <label for="equipmentCost">Equipment Cost</label>
-          <input type="number" id="equipmentCost" name="equipmentCost" required />
-
-          <label for="supplyCost">Supply House Total Cost (Home Depot, Lowes, etc.)</label>
-          <input type="number" id="supplyCost" name="supplyCost" required />
 
           <div class="actions">
             <button type="button" id="processButton" class="button">Process</button>
@@ -75,53 +72,92 @@
   </main>
 
   <script>
-    // Existing script.js functions handle floating bar, datetime, and weather.
+    // core calculation logic
     let lastCalc = {};
     function calculate() {
-      const installPrice = +document.getElementById('installPrice').value || 0;
-      const permitCost   = +document.getElementById('permitCost').value || 0;
-      const equipmentCost= +document.getElementById('equipmentCost').value || 0;
-      const supplyCost   = +document.getElementById('supplyCost').value || 0;
-      const paymentType  = document.getElementById('paymentType').value;
-      const employee     = document.getElementById('employee').value;
-      const officeExpenses = 0.05 * installPrice;
+      const salePrice     = parseFloat(document.getElementById('salePrice').value) || 0;
+      const permitCost    = parseFloat(document.getElementById('permitCost').value) || 0;
+      const equipmentCost = parseFloat(document.getElementById('equipmentCost').value) || 0;
+      const supplyCost    = parseFloat(document.getElementById('supplyCost').value) || 0;
+      const installerCost = parseFloat(document.getElementById('installerCost').value) || 0;
+      const paymentType   = document.getElementById('paymentType').value;
+      const employee      = document.getElementById('employee') ? document.getElementById('employee').value : '';
+
+      const baseTotal     = salePrice + equipmentCost + supplyCost + permitCost + installerCost;
+      const officeExpenses= 0.05 * baseTotal;
       let paymentFee = 0;
-      if (paymentType === 'credit') paymentFee = 0.033 * installPrice;
-      else if (paymentType === 'finance') paymentFee = 0.08 * installPrice;
-      const totalCosts = permitCost + equipmentCost + supplyCost + officeExpenses + paymentFee;
-      const profit = installPrice - totalCosts;
-      const profitMargin = (profit/installPrice)*100;
+      if (paymentType === 'credit') paymentFee = 0.033 * salePrice;
+      else if (paymentType === 'finance') paymentFee = 0.08 * salePrice;
+
+      const totalCosts    = baseTotal + officeExpenses + paymentFee;
+      const profit        = salePrice - totalCosts;
+      const profitMargin  = (profit / salePrice) * 100;
       let commissionRate = 0.05;
       if (profitMargin >= 55) commissionRate = 0.10;
       else if (profitMargin >= 50) commissionRate = 0.08;
-      const commission = installPrice * commissionRate;
-      lastCalc = {employee,installPrice,totalCosts,profit,profitMargin,commission};
+      const commission    = salePrice * commissionRate;
+
+      lastCalc = { salePrice, permitCost, equipmentCost, supplyCost, installerCost, officeExpenses, paymentFee, totalCosts, profit, profitMargin, commission, employee };
+
       document.getElementById('results').innerHTML = `
-        <p><strong>Employee:</strong> ${employee}</p>
-        <p><strong>Install Price:</strong> $${installPrice.toFixed(2)}</p>
+        <p><strong>Sale Price:</strong> $${salePrice.toFixed(2)}</p>
+        <p><strong>Permit Cost:</strong> $${permitCost.toFixed(2)}</p>
+        <p><strong>Equipment Cost:</strong> $${equipmentCost.toFixed(2)}</p>
+        <p><strong>Supply Cost:</strong> $${supplyCost.toFixed(2)}</p>
+        <p><strong>Installer's Cost:</strong> $${installerCost.toFixed(2)}</p>
+        <p><strong>Office Expenses (5% of all costs):</strong> $${officeExpenses.toFixed(2)}</p>
+        <p><strong>Payment Fee:</strong> $${paymentFee.toFixed(2)}</p>
         <p><strong>Total Costs:</strong> $${totalCosts.toFixed(2)}</p>
         <p><strong>Profit:</strong> $${profit.toFixed(2)}</p>
         <p><strong>Profit Margin:</strong> ${profitMargin.toFixed(2)}%</p>
         <p><strong>Commission (${(commissionRate*100).toFixed(0)}%):</strong> $${commission.toFixed(2)}</p>
       `;
     }
+
     function generatePDF() {
       calculate();
-      const {employee,installPrice,totalCosts,profit,profitMargin,commission} = lastCalc;
       const doc = new window.jspdf.jsPDF();
-      doc.text(
-        `Technician Pay Sheet\n\n${employee}\nInstall: $${installPrice.toFixed(2)}\n`+
-        `Total Costs: $${totalCosts.toFixed(2)}\nProfit: $${profit.toFixed(2)}\n`+
-        `Margin: ${profitMargin.toFixed(2)}%\nCommission: $${commission.toFixed(2)}`,
-        10,10
-      );
-      doc.save(`${employee.replace(/\s+/g,'_')}_pay_sheet.pdf`);
+      // Header: logo, title, date
+      doc.addImage('assets/Cowboys_Logo.png', 'PNG', 10, 10, 40, 20);
+      doc.setFontSize(16);
+      doc.text('Technician Pay Sheet', 60, 20);
+      doc.setFontSize(10);
+      doc.text(new Date().toLocaleString(), 200, 10, { align: 'right' });
+
+      // Body
+      let y = 40;
+      const fields = [
+        ['Sale Price', lastCalc.salePrice],
+        ['Permit Cost', lastCalc.permitCost],
+        ['Equipment Cost', lastCalc.equipmentCost],
+        ['Supply Cost', lastCalc.supplyCost],
+        ['Installer\'s Cost', lastCalc.installerCost],
+        ['Office Expenses', lastCalc.officeExpenses],
+        ['Payment Fee', lastCalc.paymentFee],
+        ['Total Costs', lastCalc.totalCosts],
+        ['Profit', lastCalc.profit],
+        ['Profit Margin', lastCalc.profitMargin + '%'],
+        ['Commission', lastCalc.commission]
+      ];
+      doc.setFontSize(12);
+      fields.forEach(([label, value]) => {
+        doc.text(`${label}: $${(typeof value === 'number' ? value.toFixed(2) : value)}`, 10, y);
+        y += 8;
+      });
+
+      // Footer
+      doc.setFontSize(9);
+      doc.text('© 2025 Cowboys AC Heating', 200, 290, { align: 'right' });
+
+      // Save
+      doc.save(`pay_sheet_${new Date().toISOString().slice(0,10)}.pdf`);
     }
+
     document.getElementById('processButton').addEventListener('click', calculate);
     document.getElementById('pdfButton').addEventListener('click', generatePDF);
-    ['employee','installPrice','permitCost','equipmentCost','supplyCost','paymentType'].forEach(id => {
-      const e = (id==='paymentType'?'change':'input');
-      document.getElementById(id).addEventListener(e, calculate);
+    ['salePrice','permitCost','equipmentCost','supplyCost','installerCost','paymentType'].forEach(id => {
+      const event = id === 'paymentType' ? 'change' : 'input';
+      document.getElementById(id).addEventListener(event, calculate);
     });
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
