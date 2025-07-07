@@ -7,22 +7,23 @@
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body class="internal-dashboard">
-  <div class="top-bar">
-    <img src="assets/logo-white.png" alt="Cowboys AC Logo" class="logo"/>
-    <div class="info">
-      <div id="installs-today">Installs Today: 0</div>
-      <div id="date-time"></div>
-      <div id="weather">Loading weather...</div>
+  <div id="background-svg"></div>
+  <div id="floating-bar">
+    <div class="info-panels">
+      <div>Installs Today: <span id="installs-count">0</span></div>
+      <div id="current-datetime"></div>
+      <div id="weather-info">Weather unavailable</div>
     </div>
+    <a href="internal-dashboard.html" class="office-button">Office Use Only</a>
   </div>
-  <div class="tile-grid">
-    <div class="tile">
-      <a href="https://mscott1988.github.io/technician-pay-sheet/" target="_blank">
-        <span class="icon">📋</span>
-        <p>Technician Pay Sheet</p>
-      </a>
+  <div class="logo-container">
+    <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo" />
+  </div>
+  <main class="container">
+    <div class="dashboard-grid">
+      <a class="tile-button" href="https://mscott1988.github.io/technician-pay-sheet/" target="_blank">Technician Pay Sheet</a>
     </div>
-    <!-- Placeholder for future internal tools -->
-  </div>
+  </main>
+  <script src="script.js"></script>
 </body>
 </html>
