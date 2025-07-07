@@ -1,37 +1,24 @@
-// Set current date & time
+// Update date & time
 function updateDateTime() {
   const now = new Date();
-  const dateTimeString = now.toLocaleString('en-US', {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: true
-  });
-  document.getElementById('current-datetime').textContent = dateTimeString;
+  document.getElementById('current-datetime').textContent = now.toLocaleString();
 }
-setInterval(updateDateTime, 1000);
 updateDateTime();
+setInterval(updateDateTime, 60000);
 
-// Fetch weather using OpenWeatherMap API
+// Fetch weather for zip 78216
 async function fetchWeather() {
+  const weatherElem = document.getElementById('weather-info');
   try {
-    const apiKey = 'YOUR_API_KEY'; // Replace with your actual key
-    const zip = '78233';
-    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?zip=${zip},us&appid=${apiKey}&units=imperial`);
-    const data = await response.json();
-
-    const temp = Math.round(data.main.temp);
-    const condition = data.weather[0].main;
-    document.getElementById('weather-info').textContent = `${temp}°F ${condition}`;
-  } catch (error) {
-    document.getElementById('weather-info').textContent = 'Weather unavailable';
+    const apiKey = 'YOUR_OPENWEATHERMAP_API_KEY'; // ← replace this
+    const res = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?zip=78216,us&appid=${apiKey}&units=imperial`
+    );
+    if (!res.ok) throw new Error('Weather fetch failed');
+    const data = await res.json();
+    weatherElem.textContent = `${Math.round(data.main.temp)}°F ${data.weather[0].main}`;
+  } catch {
+    weatherElem.textContent = 'Weather unavailable';
   }
 }
 fetchWeather();
-
-// Static installs placeholder
-const installs = 6;
-document.getElementById('installs-count').textContent = installs;
