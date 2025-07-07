@@ -65,10 +65,29 @@
     const itemsContainer = document.getElementById('items-container');
     parts.forEach(part=>{ counts[part]=0; const btn=document.createElement('button'); btn.type='button'; btn.className='part-button'; btn.textContent=part; btn.onclick=()=>{ counts[part]++; renderList(); }; grid.appendChild(btn); });
     function renderList(){ itemsContainer.innerHTML=''; Object.entries(counts).forEach(([part,qty])=>{ if(qty>0){ const div=document.createElement('div'); div.className='selected-item'; div.innerHTML=`<span>${part}</span><div class="qty-controls"><button data-part="${part}" data-action="decrease">-</button><input type="text" value="${qty}" readonly /><button data-part="${part}" data-action="increase">+</button></div>`; itemsContainer.appendChild(div); }}); document.querySelectorAll('.qty-controls button').forEach(b=>b.onclick=()=>{ const p=b.dataset.part; counts[p] += (b.dataset.action==='increase'?1:-1); if(counts[p]<0)counts[p]=0; renderList(); }); }
-    document.getElementById('submit-btn').onclick=()=>{ const entries=Object.entries(counts).filter(([p,q])=>q>0); if(!entries.length){alert('No parts selected');return;} let body='Parts Restock Request:\n'; entries.forEach(([p,q])=>body+=`${p} - Qty: ${q}\n`); window.location.href=`mailto:warehouse@cowboysac.com?subject=Parts Restock Request&body=${encodeURIComponent(body)}`; };
+    document.getElementById('submit-btn').onclick = () => {
+      const entries = Object.entries(counts).filter(([p, q]) => q > 0);
+      if (!entries.length) {
+        alert('No parts selected');
+        return;
+      }
+      // Build verification message
+      let message = 'Please confirm your parts request:
+';
+      entries.forEach(([p, q]) => {
+        message += `${p} - Qty: ${q}
+`;
+      });
+      // Show confirmation popup
+      if (confirm(message)) {
+        // If confirmed, send email
+        const body = entries.map(([p, q]) => `${p} - Qty: ${q}`).join('
+');
+        window.location.href = `mailto:warehouse@cowboysac.com?subject=Parts Restock Request&body=${encodeURIComponent(body)}`;
+      }
+    };
     function updateDateTime(){ document.getElementById('current-datetime').textContent=new Date().toLocaleString(); }
     setInterval(updateDateTime,1000); updateDateTime(); document.getElementById('weather-info').textContent='72°F Sunny';
   </script>
 </body>
 </html>
-
