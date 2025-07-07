@@ -2,22 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Technician Pay Sheet</title>
   <link rel="stylesheet" href="style.css" />
   <script defer src="script.js"></script>
   <style>
     body {
+      margin: 0;
+      font-family: Arial, sans-serif;
       background-color: #0B1F3A;
       color: white;
-      font-family: Arial, sans-serif;
-      padding: 20px;
+      overflow: hidden;
     }
-    .header {
+    .animated-background {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+    }
+    .animated-background img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.1;
+    }
+    .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      background-color: #384036;
+      padding: 1rem 2rem;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      z-index: 100;
+    }
+    .logo {
+      height: 50px;
+    }
+    #datetime {
+      font-size: 0.9rem;
+    }
+    .content {
+      padding: 80px 20px 20px; /* leave room for top bar */
+      max-width: 800px;
+      margin: 0 auto;
     }
     .button {
       background-color: #E63946;
@@ -26,13 +54,13 @@
       border-radius: 8px;
       color: white;
       cursor: pointer;
+      font-size: 1rem;
     }
     .card {
       background-color: #334232;
       padding: 20px;
       border-radius: 12px;
-      max-width: 600px;
-      margin: 0 auto;
+      margin-top: 20px;
     }
     label, input, select {
       display: block;
@@ -43,6 +71,8 @@
       padding: 8px;
       border-radius: 6px;
       border: none;
+      background: #1f2a2f;
+      color: white;
     }
     #pdfButton {
       margin-top: 15px;
@@ -50,68 +80,83 @@
   </style>
 </head>
 <body>
-  <div class="header">
-    <button class="button" onclick="location.href='internal-dashboard.html'">Back to Dashboard</button>
+
+  <!-- animated circuit background -->
+  <div class="animated-background">
+    <img src="assets/circuit-background.png" alt="Circuit Background">
+  </div>
+
+  <!-- top bar / header -->
+  <div class="top-bar">
+    <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo">
     <div id="datetime"></div>
   </div>
 
-  <div class="card">
-    <h2>Technician Pay Sheet</h2>
-    <form id="paySheetForm">
-      <label for="employee">Employee Name</label>
-      <input type="text" id="employee" name="employee" required>
+  <!-- page content -->
+  <div class="content">
+    <div class="card">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <button class="button" onclick="location.href='internal-dashboard.html'">
+          ← Back to Dashboard
+        </button>
+      </div>
+      <h2>Technician Pay Sheet</h2>
+      <form id="paySheetForm">
+        <label for="employee">Employee Name</label>
+        <input type="text" id="employee" name="employee" required>
 
-      <label for="installPrice">Install Price</label>
-      <input type="number" id="installPrice" name="installPrice" value="1000" required>
+        <label for="installPrice">Install Price</label>
+        <input type="number" id="installPrice" name="installPrice" value="1000" required>
 
-      <label for="permitCost">Permit Cost</label>
-      <input type="number" id="permitCost" name="permitCost" value="100" required>
+        <label for="permitCost">Permit Cost</label>
+        <input type="number" id="permitCost" name="permitCost" value="100" required>
 
-      <label for="paymentType">Payment Type</label>
-      <select id="paymentType" name="paymentType">
-        <option value="cash">Cash</option>
-        <option value="credit">Credit Card</option>
-        <option value="finance">Financing</option>
-      </select>
+        <label for="paymentType">Payment Type</label>
+        <select id="paymentType" name="paymentType">
+          <option value="cash">Cash</option>
+          <option value="credit">Credit Card</option>
+          <option value="finance">Financing</option>
+        </select>
 
-      <label for="equipmentCost">Equipment Cost</label>
-      <input type="number" id="equipmentCost" name="equipmentCost" required>
+        <label for="equipmentCost">Equipment Cost</label>
+        <input type="number" id="equipmentCost" name="equipmentCost" required>
 
-      <label for="otherCosts">Other Costs</label>
-      <input type="number" id="otherCosts" name="otherCosts" required>
+        <label for="otherCosts">Other Costs</label>
+        <input type="number" id="otherCosts" name="otherCosts" required>
 
-      <button type="button" id="pdfButton" class="button">Generate PDF</button>
-    </form>
+        <button type="button" id="pdfButton" class="button">Generate PDF</button>
+      </form>
 
-    <div id="results" style="margin-top:20px;"></div>
+      <div id="results" style="margin-top:20px;"></div>
+    </div>
   </div>
 
   <script>
     function updateDateTime() {
       const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      const time = now.toLocaleTimeString();
-      document.getElementById('datetime').textContent = now.toLocaleDateString(undefined, options) + ' ' + time;
+      document.getElementById('datetime').textContent =
+        now.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' })
+        + ' ' + now.toLocaleTimeString();
     }
     setInterval(updateDateTime, 1000);
     updateDateTime();
 
     document.getElementById('pdfButton').addEventListener('click', function() {
       const installPrice = parseFloat(document.getElementById('installPrice').value);
-      const permitCost = parseFloat(document.getElementById('permitCost').value);
+      const permitCost  = parseFloat(document.getElementById('permitCost').value);
       const equipmentCost = parseFloat(document.getElementById('equipmentCost').value);
-      const otherCosts = parseFloat(document.getElementById('otherCosts').value);
+      const otherCosts  = parseFloat(document.getElementById('otherCosts').value);
       const paymentType = document.getElementById('paymentType').value;
-      const employee = document.getElementById('employee').value;
+      const employee    = document.getElementById('employee').value;
 
       const officeExpenses = 0.05 * installPrice;
       let paymentFee = 0;
-      if (paymentType === 'credit') paymentFee = 0.033 * installPrice;
+      if (paymentType === 'credit')  paymentFee = 0.033 * installPrice;
       else if (paymentType === 'finance') paymentFee = 0.08 * installPrice;
 
       const totalCosts = permitCost + equipmentCost + otherCosts + officeExpenses + paymentFee;
-      const profit = installPrice - totalCosts;
-      const profitMargin = (profit / installPrice) * 100;
+      const profit     = installPrice - totalCosts;
+      const profitMargin = (profit/installPrice)*100;
 
       let commissionRate = 0.05;
       if (profitMargin >= 55) commissionRate = 0.10;
@@ -122,28 +167,25 @@
       const results = `
         <strong>Employee:</strong> ${employee}<br>
         <strong>Install Price:</strong> $${installPrice.toFixed(2)}<br>
-        <strong>Total Costs (with office and payment fees):</strong> $${totalCosts.toFixed(2)}<br>
+        <strong>Total Costs:</strong> $${totalCosts.toFixed(2)}<br>
         <strong>Profit:</strong> $${profit.toFixed(2)}<br>
         <strong>Profit Margin:</strong> ${profitMargin.toFixed(2)}%<br>
-        <strong>Commission Rate:</strong> ${(commissionRate * 100).toFixed(0)}%<br>
+        <strong>Commission Rate:</strong> ${(commissionRate*100).toFixed(0)}%<br>
         <strong>Commission:</strong> $${commission.toFixed(2)}
       `;
-
       document.getElementById('results').innerHTML = results;
 
+      // PDF
       const doc = new window.jspdf.jsPDF();
-      doc.text(`Technician Pay Sheet
-
-${employee}
-Install: $${installPrice.toFixed(2)}
-Total Costs: $${totalCosts.toFixed(2)}
-Profit: $${profit.toFixed(2)}
-Margin: ${profitMargin.toFixed(2)}%
-Commission: $${commission.toFixed(2)}`, 10, 10);
-      doc.save(`${employee.replace(/\s+/g, '_')}_pay_sheet.pdf`);
+      doc.text(
+        `Technician Pay Sheet\n\n${employee}\nInstall: $${installPrice.toFixed(2)}\n`+
+        `Total Costs: $${totalCosts.toFixed(2)}\nProfit: $${profit.toFixed(2)}\n`+
+        `Margin: ${profitMargin.toFixed(2)}%\nCommission: $${commission.toFixed(2)}`,
+        10, 10
+      );
+      doc.save(`${employee.replace(/\s+/g,'_')}_pay_sheet.pdf`);
     });
   </script>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 </html>
