@@ -2,61 +2,127 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cowboys AC Warranty Form</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="form-container">
+  <!-- Fixed header matching dashboard -->
+  <div id="floating-bar">
+    <div class="info-panels-left">
+      <div>Installs Today: <span id="installs-count">0</span></div>
+      <div id="current-datetime"></div>
+    </div>
+    <div class="info-panels-right">
+      <div id="weather-info">72°F Sunny</div>
+    </div>
+    <div class="header-buttons">
+      <a href="index.html" class="btn">Return to Dashboard</a>
+      <a href="internal-dashboard.html" class="btn">Office Use Only</a>
+    </div>
+  </div>
+
+  <!-- Centered logo -->
+  <div class="logo-container">
+    <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo" />
+  </div>
+
+  <!-- Warranty form wizard -->
+  <main class="container">
+    <h1 class="dashboard-title">Warranty Form</h1>
     <form id="warrantyForm">
-      <div class="step active" id="step-1">
+      <!-- Step 1 -->
+      <div class="wizard-step" id="step-1">
         <h2>Step 1: Employee & Customer Info</h2>
         <label>Employee</label>
-        <select name="employee" required>
-          <option value="">-- Select Employee --</option>
-          <option>Employee 1</option>
-          <option>Employee 2</option>
-        </select>
+        <div class="wizard-grid">
+          <button type="button" class="option-button" data-step="1" data-employee="Employee 1">Employee 1</button>
+          <button type="button" class="option-button" data-step="1" data-employee="Employee 2">Employee 2</button>
+        </div>
         <label>Customer Name</label>
-        <input type="text" name="customerName" required>
-        <button type="button" class="next">Next</button>
+        <input type="text" id="customerName" placeholder="Customer Name" />
+        <button type="button" class="btn next-btn">Next</button>
       </div>
 
-      <div class="step" id="step-2">
+      <!-- Step 2 -->
+      <div class="wizard-step" id="step-2" style="display:none;">
         <h2>Step 2: Equipment Details</h2>
         <label>Brand</label>
-        <input type="text" name="brand">
+        <input type="text" id="brand" placeholder="Brand" />
         <label>Model Number</label>
-        <input type="text" name="modelNumber">
-        <button type="button" class="prev">Back</button>
-        <button type="button" class="next">Next</button>
+        <input type="text" id="modelNumber" placeholder="Model Number" />
+        <div class="wizard-nav">
+          <button type="button" class="btn prev-btn">Back</button>
+          <button type="button" class="btn next-btn">Next</button>
+        </div>
       </div>
 
-      <div class="step" id="step-3">
+      <!-- Step 3 -->
+      <div class="wizard-step" id="step-3" style="display:none;">
         <h2>Step 3: Return & Upload</h2>
-        <label>Will Return to Manufacturer?</label>
-        <select name="returnToManufacturer">
-          <option>No</option>
-          <option>Yes</option>
-        </select>
+        <label>Return to Manufacturer?</label>
+        <div class="wizard-grid">
+          <button type="button" class="option-button" data-return="No">No</button>
+          <button type="button" class="option-button" data-return="Yes">Yes</button>
+        </div>
         <label>Upload Photo</label>
-        <input type="file" name="photoUpload">
-        <button type="button" class="prev">Back</button>
-        <button type="button" class="next">Next</button>
+        <input type="file" id="photoUpload" />
+        <div class="wizard-nav">
+          <button type="button" class="btn prev-btn">Back</button>
+          <button type="button" class="btn next-btn">Next</button>
+        </div>
       </div>
 
-      <div class="step" id="step-4">
+      <!-- Step 4 -->
+      <div class="wizard-step" id="step-4" style="display:none;">
         <h2>Step 4: Review & Signature</h2>
         <label>Signature</label>
-        <input type="text" name="signature" placeholder="Type to sign">
-        <button type="button" class="prev">Back</button>
-        <button type="submit">Submit</button>
+        <input type="text" id="signature" placeholder="Type to sign" />
+        <div class="wizard-nav">
+          <button type="button" class="btn prev-btn">Back</button>
+          <button type="submit" class="btn">Submit</button>
+        </div>
       </div>
     </form>
-    <div class="footer">© 2025 Cowboys AC – All Rights Reserved</div>
-  </div>
+  </main>
+
+  <footer>© 2025 Cowboys AC – All Rights Reserved</footer>
+
   <script src="script.js"></script>
+  <script>
+    // Floating bar updates
+    function updateDateTime(){ document.getElementById('current-datetime').textContent = new Date().toLocaleString(); }
+    setInterval(updateDateTime,1000); updateDateTime();
+
+    // Wizard navigation logic
+    const steps = ['step-1','step-2','step-3','step-4'];
+    let current = 0;
+    function showStep(index) {
+      steps.forEach((id,i) => document.getElementById(id).style.display = i===index ? 'block':'none');
+      current = index;
+    }
+
+    document.querySelectorAll('.next-btn').forEach(btn => btn.onclick = () => showStep(current+1));
+    document.querySelectorAll('.prev-btn').forEach(btn => btn.onclick = () => showStep(current-1));
+
+    // Option-button highlights
+    document.querySelectorAll('.option-button').forEach(btn => {
+      btn.onclick = () => {
+        const parent = btn.closest('.wizard-step');
+        parent.querySelectorAll('.option-button').forEach(b=>b.classList.remove('selected'));
+        btn.classList.add('selected');
+      };
+    });
+
+    // Form submit
+    document.getElementById('warrantyForm').onsubmit = e => {
+      e.preventDefault();
+      // handle pdf/email logic here
+      alert('Form submitted!');
+    };
+
+    // Init
+    showStep(0);
+  </script>
 </body>
 </html>
