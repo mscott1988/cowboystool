@@ -72,7 +72,7 @@
   </main>
 
   <script>
-    // core calculation logic
+    // script.js handles background, datetime, weather
     let lastCalc = {};
     function calculate() {
       const salePrice     = parseFloat(document.getElementById('salePrice').value) || 0;
@@ -81,17 +81,18 @@
       const supplyCost    = parseFloat(document.getElementById('supplyCost').value) || 0;
       const installerCost = parseFloat(document.getElementById('installerCost').value) || 0;
       const paymentType   = document.getElementById('paymentType').value;
-      const employee      = document.getElementById('employee') ? document.getElementById('employee').value : '';
+      const employeeElem  = document.getElementById('employee');
+      const employee      = employeeElem ? employeeElem.value : '';
 
-      const baseTotal     = salePrice + equipmentCost + supplyCost + permitCost + installerCost;
-      const officeExpenses= 0.05 * baseTotal;
+      // Office expenses: 5% of total sale price
+      const officeExpenses = 0.05 * salePrice;
       let paymentFee = 0;
       if (paymentType === 'credit') paymentFee = 0.033 * salePrice;
       else if (paymentType === 'finance') paymentFee = 0.08 * salePrice;
 
-      const totalCosts    = baseTotal + officeExpenses + paymentFee;
+      const totalCosts    = permitCost + equipmentCost + supplyCost + installerCost + officeExpenses + paymentFee;
       const profit        = salePrice - totalCosts;
-      const profitMargin  = (profit / salePrice) * 100;
+      const profitMargin  = salePrice ? (profit / salePrice) * 100 : 0;
       let commissionRate = 0.05;
       if (profitMargin >= 55) commissionRate = 0.10;
       else if (profitMargin >= 50) commissionRate = 0.08;
@@ -105,7 +106,7 @@
         <p><strong>Equipment Cost:</strong> $${equipmentCost.toFixed(2)}</p>
         <p><strong>Supply Cost:</strong> $${supplyCost.toFixed(2)}</p>
         <p><strong>Installer's Cost:</strong> $${installerCost.toFixed(2)}</p>
-        <p><strong>Office Expenses (5% of all costs):</strong> $${officeExpenses.toFixed(2)}</p>
+        <p><strong>Office Expenses (5% of Sale Price):</strong> $${officeExpenses.toFixed(2)}</p>
         <p><strong>Payment Fee:</strong> $${paymentFee.toFixed(2)}</p>
         <p><strong>Total Costs:</strong> $${totalCosts.toFixed(2)}</p>
         <p><strong>Profit:</strong> $${profit.toFixed(2)}</p>
@@ -113,7 +114,7 @@
         <p><strong>Commission (${(commissionRate*100).toFixed(0)}%):</strong> $${commission.toFixed(2)}</p>
       `;
     }
-
+    
     function generatePDF() {
       calculate();
       const doc = new window.jspdf.jsPDF();
@@ -141,7 +142,8 @@
       ];
       doc.setFontSize(12);
       fields.forEach(([label, value]) => {
-        doc.text(`${label}: $${(typeof value === 'number' ? value.toFixed(2) : value)}`, 10, y);
+        const text = typeof value === 'number' ? `$${value.toFixed(2)}` : value;
+        doc.text(`${label}: ${text}`, 10, y);
         y += 8;
       });
 
@@ -149,16 +151,17 @@
       doc.setFontSize(9);
       doc.text('© 2025 Cowboys AC Heating', 200, 290, { align: 'right' });
 
-      // Save
       doc.save(`pay_sheet_${new Date().toISOString().slice(0,10)}.pdf`);
     }
 
     document.getElementById('processButton').addEventListener('click', calculate);
     document.getElementById('pdfButton').addEventListener('click', generatePDF);
-    ['salePrice','permitCost','equipmentCost','supplyCost','installerCost','paymentType'].forEach(id => {
-      const event = id === 'paymentType' ? 'change' : 'input';
-      document.getElementById(id).addEventListener(event, calculate);
-    });
+    
+    ['salePrice','permitCost','equipmentCost','supplyCost','installerCost','paymentType']
+      .forEach(id => {
+        const event = id === 'paymentType' ? 'change' : 'input';
+        document.getElementById(id).addEventListener(event, calculate);
+      });
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
