@@ -8,7 +8,8 @@
 /* Global Reset */
 * {
   box-sizing: border-box;
-  margin: 0; padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 /* Body and Background */
@@ -22,15 +23,19 @@ body {
 
 /* Circuit-style SVG background */
 #background-svg {
-  position: fixed; top: 0; left: 0;
+  position: fixed;
+  top: 0; left: 0;
   width: 100vw; height: 100vh;
   background: url('assets/circuit.svg') center/cover no-repeat;
-  opacity: 0.12; z-index: 0; pointer-events: none;
+  opacity: 0.12;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* Floating Info Bar */
 #floating-bar {
-  position: fixed; top: 0; left: 0;
+  position: fixed;
+  top: 0; left: 0;
   width: 100%; height: 3.5rem;
   display: flex; justify-content: space-between; align-items: center;
   padding: 0 1rem;
@@ -48,37 +53,45 @@ body {
   margin-left: auto;
 }
 
-/* Logo Centering and Animation */
+/* Logo Centering and Sizing */
 .logo-container {
   width: 100%; display: flex; justify-content: center; align-items: center;
   margin-top: 2rem; z-index: 1;
 }
 
-.logo-wrapper.large-logo {
-  display: inline-block; opacity: 0; transform: translate(-20px, -20px);
-  animation: slideIn 0.8s ease-out forwards, glow 1.5s ease-in-out 0.8s forwards;
+.logo {
+  max-width: 150px; width: auto; height: auto;
 }
 
-.large-logo .logo {
-  max-width: 300px; width: 100%; height: auto;
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translate(-20px, -20px); }
-  to   { opacity: 1; transform: translate(0, 0); }
+/* Optional glow animation on logo */
+.logo-glow {
+  animation: glow 1.5s ease-in-out forwards;
 }
 
 @keyframes glow {
-  0% { filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)) drop-shadow(0 0 4px rgba(255,255,255,0.2)); }
-  50% { filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)) drop-shadow(0 0 8px rgba(255,255,255,0.4)); }
-  100% { filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)) drop-shadow(0 0 4px rgba(255,255,255,0.2)); }
+  0% {
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)) drop-shadow(0 0 4px rgba(255,255,255,0.2));
+  }
+  50% {
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)) drop-shadow(0 0 8px rgba(255,255,255,0.4));
+  }
+  100% {
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5)) drop-shadow(0 0 4px rgba(255,255,255,0.2));
+  }
 }
 
-/* Title Animation */
+/* Dashboard Title Animation */
+.dashboard-title {
+  font-size: 2rem;
+}
+
 .title-animated-from-left {
-  opacity: 0; transform: translateX(-100px);
+  opacity: 0;
+  transform: translateX(-100px);
   animation: slideInLeft 1s ease-out forwards 0.3s;
-  display: block; text-align: center; margin: 1.5rem 0;
+  display: block;
+  text-align: center;
+  margin: 1.5rem 0;
 }
 
 @keyframes slideInLeft {
