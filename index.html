@@ -2,32 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cowboys AC Dashboard</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
-  <style>
-    .logo-container { display: flex; justify-content: center; margin-top: 6rem; position: relative; z-index: 10; }
-    .logo-container .logo { max-width: 300px; width: 100%; }
-    #floating-bar { position: fixed; top:0; left:0; width:100%; display:flex; justify-content:space-between; align-items:center; background:rgba(7,21,40,0.95); padding:.5rem 1rem; z-index:1000; }
-    #floating-bar .info-panels { display:flex; gap:1.5rem; color:#fff; }
-  </style>
 </head>
 <body>
+  <div id="background-svg"></div>
   <div id="floating-bar">
     <div class="info-panels">
       <div>Installs Today: <span id="installs-count">0</span></div>
       <div id="current-datetime"></div>
       <div id="weather-info">Weather unavailable</div>
     </div>
-    <a href="internal-dashboard.html" class="office-button btn">Office Use Only</a>
+    <a href="internal-dashboard.html" class="office-button">Office Use Only</a>
   </div>
   <div class="logo-container">
-    <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo animated">
+    <img src="assets/logo.png" alt="Cowboys AC Logo" class="logo">
   </div>
-  <div class="loading" style="text-align:center; margin-top:1rem;">Loading time...</div>
-  <div class="testing-banner" style="text-align:center; margin:1rem auto;">FOR TESTING PURPOSES ONLY</div>
+  <div class="loading">Loading time...</div>
   <main class="container">
-    <h1 class="dashboard-title" style="text-align:center;">Cowboys AC Dashboard</h1>
+    <h1 class="dashboard-title">Cowboys AC Dashboard</h1>
     <div class="dashboard-grid">
       <a class="tile-button" href="warranty.html">Warranty Form</a>
       <a class="tile-button" href="installer-checklist.html">Installer Checklist</a>
@@ -40,11 +34,7 @@
       <a class="tile-button" href="refrigerant-tracker.html">Refrigerant Tracker</a>
     </div>
   </main>
-  <footer style="text-align:center; margin:2rem 0;">© 2025 Cowboys AC – All Rights Reserved</footer>
+  <footer>© 2025 Cowboys AC – All Rights Reserved</footer>
   <script src="script.js"></script>
-  <script>
-    function updateDateTime() { document.getElementById('current-datetime').textContent = new Date().toLocaleString(); }
-    setInterval(updateDateTime, 1000); updateDateTime();
-  </script>
 </body>
 </html>
