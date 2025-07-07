@@ -6,24 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
-  <style>
-    /* Circuit-style SVG background */
-    #background-svg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: url('assets/circuit.svg') center/cover no-repeat;
-      opacity: 0.12;
-      z-index: 0;
-      pointer-events: none;
-    }
-  </style>
 </head>
 <body>
-  <!-- Circuit background -->
+  <!-- Circuit SVG background -->
   <div id="background-svg"></div>
 
-  <!-- Floating info bar -->
+  <!-- Top floating bar -->
   <div id="floating-bar">
     <div class="info-panels-left">
       <div id="installs-count">Installs Today: 0</div>
@@ -34,11 +22,9 @@
     </div>
   </div>
 
-  <!-- Centered, larger animated logo -->
+  <!-- Centered, constrained logo with optional glow class -->
   <div class="logo-container">
-    <div class="logo-wrapper large-logo">
-      <img src="assets/cowboyslogo.png" alt="Cowboys AC Logo" class="logo">
-    </div>
+    <img src="assets/cowboyslogo.png" alt="Cowboys AC Logo" class="logo logo-glow">
   </div>
 
   <!-- Main Dashboard Grid -->
