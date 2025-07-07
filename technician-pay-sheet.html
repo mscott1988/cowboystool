@@ -6,115 +6,169 @@
   <title>Technician Pay Sheet</title>
   <link rel="stylesheet" href="style.css" />
   <script defer src="script.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0B1F3A;
+      color: white;
+      overflow: hidden;
+    }
+    .animated-background {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+    }
+    .animated-background img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0.1;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #384036;
+      padding: 1rem 2rem;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      z-index: 100;
+    }
+    .logo {
+      height: 50px;
+    }
+    #datetime {
+      font-size: 0.9rem;
+    }
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 100px; /* space for top-bar */
+      height: calc(100vh - 100px);
+    }
+    .card {
+      background-color: #334232;
+      padding: 20px;
+      border-radius: 12px;
+      width: 600px;
+    }
+    .button {
+      background-color: #E63946;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-right: 10px;
+    }
+    label, input, select {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    input, select {
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      background: #1f2a2f;
+      color: white;
+    }
+    #results {
+      margin-top: 20px;
+    }
+  </style>
 </head>
-<body class="bg-circuit"> <!-- same background wrapper as refrigerant-tracker -->
+<body>
 
-  <!-- Top Bar (identical to refrigerant-tracker) -->
-  <header class="top-bar">
-    <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo" />
-    <div id="datetime" class="datetime"></div>
-  </header>
+  <div class="animated-background">
+    <img src="assets/circuit-background.png" alt="Circuit Background">
+  </div>
 
-  <!-- Main Container -->
-  <main class="container">
+  <div class="top-bar">
+    <img src="assets/Cowboys_Logo.png" alt="Cowboys AC Logo" class="logo">
+    <div id="datetime"></div>
+  </div>
+
+  <main>
     <div class="card">
-      <h1 class="page-title">Technician Pay Sheet</h1>
-
-      <!-- Form laid out with the same grid classes -->
-      <form id="paySheetForm" class="form-grid">
-
-        <div class="form-group">
-          <label for="employee">Employee Name</label>
-          <input type="text" id="employee" name="employee" required />
-        </div>
-
-        <div class="form-group">
-          <label for="installPrice">Install Price</label>
-          <input type="number" id="installPrice" name="installPrice" value="1000" required />
-        </div>
-
-        <div class="form-group">
-          <label for="permitCost">Permit Cost</label>
-          <input type="number" id="permitCost" name="permitCost" value="100" required />
-        </div>
-
-        <div class="form-group">
-          <label for="paymentType">Payment Type</label>
-          <select id="paymentType" name="paymentType">
-            <option value="cash">Cash</option>
-            <option value="credit">Credit Card</option>
-            <option value="finance">Financing</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="equipmentCost">Equipment Cost</label>
-          <input type="number" id="equipmentCost" name="equipmentCost" required />
-        </div>
-
-        <div class="form-group">
-          <label for="otherCosts">Other Costs</label>
-          <input type="number" id="otherCosts" name="otherCosts" required />
-        </div>
-
-      </form>
-
-      <!-- Action Buttons (same btn-primary / btn-secondary classes) -->
-      <div class="form-actions">
-        <button id="processButton" class="btn btn-primary">Process</button>
-        <button id="pdfButton" class="btn btn-secondary">Generate PDF</button>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <button class="button" onclick="location.href='internal-dashboard.html'">
+          ← Back to Dashboard
+        </button>
       </div>
 
-      <!-- Results area -->
-      <div id="results" class="results"></div>
+      <h2>Technician Pay Sheet</h2>
+      <form id="paySheetForm">
+        <label for="employee">Employee Name</label>
+        <input type="text" id="employee" name="employee" required>
+
+        <label for="installPrice">Install Price</label>
+        <input type="number" id="installPrice" name="installPrice" value="1000" required>
+
+        <label for="permitCost">Permit Cost</label>
+        <input type="number" id="permitCost" name="permitCost" value="100" required>
+
+        <label for="paymentType">Payment Type</label>
+        <select id="paymentType" name="paymentType">
+          <option value="cash">Cash</option>
+          <option value="credit">Credit Card</option>
+          <option value="finance">Financing</option>
+        </select>
+
+        <label for="equipmentCost">Equipment Cost</label>
+        <input type="number" id="equipmentCost" name="equipmentCost" required>
+
+        <label for="otherCosts">Other Costs</label>
+        <input type="number" id="otherCosts" name="otherCosts" required>
+
+        <div style="margin-top:20px;">
+          <button type="button" id="processButton" class="button">Process</button>
+          <button type="button" id="pdfButton" class="button">Generate PDF</button>
+        </div>
+      </form>
+
+      <div id="results"></div>
     </div>
   </main>
 
   <script>
-    // Live datetime (same as your other pages)
-    function updateDateTime() {
-      const now = new Date();
-      document.getElementById('datetime').textContent =
-        now.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' })
-        + ' ' + now.toLocaleTimeString();
-    }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
-
-    // Calculation + Commission logic (identical to before)
     let lastCalc = {};
     function calculate() {
-      const installPrice   = parseFloat(document.getElementById('installPrice').value) || 0;
-      const permitCost     = parseFloat(document.getElementById('permitCost').value) || 0;
-      const equipmentCost  = parseFloat(document.getElementById('equipmentCost').value) || 0;
-      const otherCosts     = parseFloat(document.getElementById('otherCosts').value) || 0;
-      const paymentType    = document.getElementById('paymentType').value;
-      const employee       = document.getElementById('employee').value;
+      const installPrice = +document.getElementById('installPrice').value || 0;
+      const permitCost   = +document.getElementById('permitCost').value || 0;
+      const equipmentCost= +document.getElementById('equipmentCost').value || 0;
+      const otherCosts   = +document.getElementById('otherCosts').value || 0;
+      const paymentType  = document.getElementById('paymentType').value;
+      const employee     = document.getElementById('employee').value;
 
       const officeExpenses = 0.05 * installPrice;
       let paymentFee = 0;
-      if (paymentType === 'credit') paymentFee = 0.033 * installPrice;
+      if (paymentType === 'credit')  paymentFee = 0.033 * installPrice;
       else if (paymentType === 'finance') paymentFee = 0.08 * installPrice;
 
       const totalCosts   = permitCost + equipmentCost + otherCosts + officeExpenses + paymentFee;
       const profit       = installPrice - totalCosts;
-      const profitMargin = (profit / installPrice) * 100;
+      const profitMargin = profit/installPrice*100;
 
       let commissionRate = 0.05;
       if (profitMargin >= 55) commissionRate = 0.10;
       else if (profitMargin >= 50) commissionRate = 0.08;
 
       const commission = installPrice * commissionRate;
-
       lastCalc = { employee, installPrice, totalCosts, profit, profitMargin, commission };
 
       document.getElementById('results').innerHTML = `
-        <p><strong>Employee:</strong> ${employee}</p>
-        <p><strong>Install Price:</strong> $${installPrice.toFixed(2)}</p>
-        <p><strong>Total Costs:</strong> $${totalCosts.toFixed(2)}</p>
-        <p><strong>Profit:</strong> $${profit.toFixed(2)}</p>
-        <p><strong>Margin:</strong> ${profitMargin.toFixed(2)}%</p>
-        <p><strong>Commission (${(commissionRate*100).toFixed(0)}%):</strong> $${commission.toFixed(2)}</p>
+        <strong>Employee:</strong> ${employee}<br>
+        <strong>Install Price:</strong> $${installPrice.toFixed(2)}<br>
+        <strong>Total Costs:</strong> $${totalCosts.toFixed(2)}<br>
+        <strong>Profit:</strong> $${profit.toFixed(2)}<br>
+        <strong>Margin:</strong> ${profitMargin.toFixed(2)}%<br>
+        <strong>Commission Rate:</strong> ${(commissionRate*100).toFixed(0)}%<br>
+        <strong>Commission:</strong> $${commission.toFixed(2)}
       `;
     }
 
@@ -122,9 +176,16 @@
       const { employee, installPrice, totalCosts, profit, profitMargin, commission } = lastCalc;
       const doc = new window.jspdf.jsPDF();
       doc.text(
-        `Technician Pay Sheet\n\n${employee}\nInstall: $${installPrice.toFixed(2)}\n` +
-        `Total Costs: $${totalCosts.toFixed(2)}\nProfit: $${profit.toFixed(2)}\n` +
-        `Margin: ${profitMargin.toFixed(2)}%\nCommission: $${commission.toFixed(2)}`,
+        `Technician Pay Sheet
+
+${employee}
+Install: $${installPrice.toFixed(2)}
+`+
+        `Total Costs: $${totalCosts.toFixed(2)}
+Profit: $${profit.toFixed(2)}
+`+
+        `Margin: ${profitMargin.toFixed(2)}%
+Commission: $${commission.toFixed(2)}`,
         10, 10
       );
       doc.save(`${employee.replace(/\s+/g,'_')}_pay_sheet.pdf`);
@@ -136,13 +197,21 @@
       generatePDF();
     });
 
-    // Auto-recalc on field change
-    ['installPrice','permitCost','equipmentCost','otherCosts','paymentType','employee'].forEach(id => {
-      const ev = id==='paymentType' ? 'change' : 'input';
-      document.getElementById(id).addEventListener(ev, calculate);
-    });
-  </script>
+    ['employee','installPrice','permitCost','equipmentCost','otherCosts','paymentType']
+      .forEach(id => {
+        const ev = id==='paymentType' ? 'change' : 'input';
+        document.getElementById(id).addEventListener(ev, calculate);
+      });
 
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById('datetime').textContent =
+        now.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'long', day:'numeric' })
+        + ' ' + now.toLocaleTimeString();
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 </html>
