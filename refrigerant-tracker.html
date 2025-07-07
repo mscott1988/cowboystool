@@ -9,12 +9,13 @@
 <body>
   <div id="background-svg"></div>
   <div id="floating-bar">
-    <div class="info-panels">
+    <div class="info-panels-left">
       <div>Installs Today: <span id="installs-count">0</span></div>
       <div id="current-datetime"></div>
-      <div id="weather-info">Weather unavailable</div>
     </div>
-    <a href="index.html" class="office-button">Back to Dashboard</a>
+    <div class="info-panels-right">
+      <div id="weather-info">Loading weather...</div>
+    </div>
   </div>
 
   <div class="logo-wrapper logo-container">
@@ -22,8 +23,58 @@
   </div>
 
   <main class="container">
-    <h1 class="dashboard-title title-animated">Refrigerant Tracker</h1>
-    <!-- Existing form content here -->
+    <h1 class="dashboard-title title-animated-from-left">Refrigerant Tracker</h1>
+    <form id="tracker-form">
+      <div class="step" id="step-1">
+        <label for="role">Role:</label>
+        <select id="role">
+          <option value="" disabled selected>Select role</option>
+          <option>Technician</option>
+          <option>Installer</option>
+        </select>
+        <button type="button" id="next-1" class="btn" disabled>Next</button>
+      </div>
+      <div class="step" id="step-2" style="display:none;">
+        <label for="employee">Employee:</label>
+        <select id="employee">
+          <option value="" disabled selected>Select employee</option>
+        </select>
+        <button type="button" id="next-2" class="btn" disabled>Next</button>
+      </div>
+      <div class="step" id="step-3" style="display:none;">
+        <label for="invoice">Invoice #:</label>
+        <input id="invoice" placeholder="Invoice #" />
+        <button type="button" id="next-3" class="btn" disabled>Next</button>
+      </div>
+      <div class="step" id="step-4" style="display:none;">
+        <label>Refrigerant Type:</label>
+        <div style="display:flex; gap:1rem; margin-top:.5rem;">
+          <button type="button" class="refrig-btn btn" data-type="R-410A">R-410A</button>
+          <button type="button" class="refrig-btn btn" data-type="R-454B">R-454B</button>
+        </div>
+      </div>
+      <div class="step" id="step-5" style="display:none;">
+        <label for="tank">Tank #:</label>
+        <select id="tank">
+          <option value="" disabled selected>Select tank #</option>
+        </select>
+        <button type="button" id="next-5" class="btn" disabled>Next</button>
+      </div>
+      <div class="step" id="step-6" style="display:none;">
+        <label>Amount Used (lbs):</label>
+        <div class="quantity-control">
+          <button type="button" id="decrease" class="btn">-</button>
+          <input type="number" id="amount" value="0" step="0.5" min="0" max="25.5" readonly />
+          <button type="button" id="increase" class="btn">+</button>
+        </div>
+        <button type="button" id="next-6" class="btn" disabled>Next</button>
+      </div>
+      <div class="step" id="step-7" style="display:none;">
+        <label for="signature">Signature:</label>
+        <input type="text" id="signature" placeholder="Type your name to sign" />
+        <button type="submit" id="submit-btn" class="btn" disabled>Submit</button>
+      </div>
+    </form>
   </main>
 
   <footer>© 2025 Cowboys AC – All Rights Reserved</footer>
