@@ -21,15 +21,26 @@ body {
   overflow-x: hidden;
 }
 
-/* Circuit-style SVG background */
+/* Circuit‐style SVG background (animated) */
 #background-svg {
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
-  background: url('assets/circuit.svg') center/cover no-repeat;
+  background: url('assets/circuit.svg') repeat;
+  background-size: cover;
   opacity: 0.12;
   z-index: 0;
   pointer-events: none;
+  animation: panCircuit 60s linear infinite;
+}
+
+@keyframes panCircuit {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 100% 100%;
+  }
 }
 
 /* Floating Info Bar */
