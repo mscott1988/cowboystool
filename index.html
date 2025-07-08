@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cowboys AC – Temporarily Down</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --bg-color: #0B1F3A;
+      --text-color: #FFFFFF;
+      --accent-color: #E63946;
+    }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    html, body {
+      height: 100%;
+      background: var(--bg-color);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-color);
+    }
+    /* Animated circuit background */
+    #background-svg {
+      position: fixed;
+      top:0; left:0;
+      width:100vw; height:100vh;
+      background: url('assets/circuit.svg') repeat-x;
+      background-size:200% 100%;
+      opacity:0.08;
+      pointer-events:none;
+      animation: pan 60s linear infinite;
+      z-index:0;
+    }
+    @keyframes pan {
+      from { background-position: 0 0; }
+      to   { background-position: -100% 0; }
+    }
+    .content {
+      position: relative;
+      z-index:1;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding: 1rem;
+    }
+    .content img {
+      max-width: 200px;
+      width: 50%;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.1rem;
+      color: var(--accent-color);
+    }
+  </style>
+</head>
+<body>
+  <div id="background-svg"></div>
+  <div class="content">
+    <img src="assets/cowboyslogo.png" alt="Cowboys AC Logo">
+    <h1>We’ll Be Right Back</h1>
+    <p>Our site is temporarily down while we set up server hosting and environment.<br>
+       Thanks for your patience!</p>
+  </div>
+</body>
+</html>
