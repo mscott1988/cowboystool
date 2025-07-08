@@ -21,18 +21,17 @@ body {
   overflow-x: hidden;
 }
 
-/* Circuit‐style SVG background (animated) */
+/* Circuit‐style SVG background (strongly animated for testing) */
 #background-svg {
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
   background: url('assets/circuit.svg') repeat;
-  /* Make the pattern larger than the viewport so panning is visible */
-  background-size: 200% 200%;
-  opacity: 0.12;
+  background-size: 300% 300%;
+  opacity: 0.3;               /* bump opacity for visibility */
   z-index: 0;
   pointer-events: none;
-  animation: panCircuit 120s linear infinite;
+  animation: panCircuit 15s linear infinite;  /* speed up */
 }
 
 @keyframes panCircuit {
@@ -43,7 +42,6 @@ body {
     background-position: -100% -100%;
   }
 }
-
 
 /* Floating Info Bar */
 #floating-bar {
