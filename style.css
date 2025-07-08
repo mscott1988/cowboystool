@@ -27,21 +27,23 @@ body {
   top: 0; left: 0;
   width: 100vw; height: 100vh;
   background: url('assets/circuit.svg') repeat;
-  background-size: cover;
+  /* Make the pattern larger than the viewport so panning is visible */
+  background-size: 200% 200%;
   opacity: 0.12;
   z-index: 0;
   pointer-events: none;
-  animation: panCircuit 60s linear infinite;
+  animation: panCircuit 120s linear infinite;
 }
 
 @keyframes panCircuit {
-  from {
-    background-position: 0 0;
+  0% {
+    background-position: 0% 0%;
   }
-  to {
-    background-position: 100% 100%;
+  100% {
+    background-position: -100% -100%;
   }
 }
+
 
 /* Floating Info Bar */
 #floating-bar {
