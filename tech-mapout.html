@@ -5,104 +5,113 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Technician Map Out</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      background: #0B1F3A;
-      font-family: 'Segoe UI', sans-serif;
-      color: white;
-      padding: 2rem;
-    }
-    .container {
-      background: #334232;
-      padding: 2rem;
-      border-radius: 14px;
-      max-width: 900px;
-      margin: auto;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 0.5rem;
-      border-radius: 6px;
-      border: none;
-      margin-top: 0.25rem;
-    }
-    input[type="file"] {
-      background: white;
-      color: #0B1F3A;
-    }
-    button {
-      margin-top: 2rem;
-      background: #E63946;
-      border: none;
-      padding: 0.75rem 1.25rem;
-      color: white;
-      font-size: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .footer-nav {
-      text-align: center;
-      margin-top: 2rem;
-    }
-    .footer-nav a {
-      background: #E63946;
-      color: white;
-      padding: 10px 20px;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-    }
-  </style>
+  <script src="mapout.js" defer></script>
 </head>
 <body>
-  <form class="container">
-    <h2>Technician Map Out</h2>
+  <!-- Circuit SVG background (inline or via JS) -->
+  <div id="background-svg"></div>
 
-    <label for="address">Customer Address:</label>
-    <input type="text" id="address" placeholder="123 Main St, City, State" />
-
-    <label for="squarefootage">Square Footage (auto or manual):</label>
-    <input type="number" id="squarefootage" placeholder="e.g. 2400" />
-
-    <label for="yearbuilt">Year Built:</label>
-    <input type="number" id="yearbuilt" placeholder="e.g. 2006" />
-
-    <label for="equipment">Existing HVAC Equipment (Describe or Photo):</label>
-    <textarea id="equipment" rows="3"></textarea>
-    <input type="file" accept="image/*" capture="environment" multiple />
-
-    <label for="returns">Number of Returns:</label>
-    <input type="number" id="returns" />
-    <label>Photo of Returns:</label>
-    <input type="file" accept="image/*" capture="environment" multiple />
-
-    <label for="supplies">Number of Supplies:</label>
-    <input type="number" id="supplies" />
-    <label>Photo of Supplies:</label>
-    <input type="file" accept="image/*" capture="environment" multiple />
-
-    <label for="thermostat">Thermostat (Brand/Model):</label>
-    <input type="text" id="thermostat" placeholder="e.g. Honeywell T6" />
-    <label>Thermostat Photo:</label>
-    <input type="file" accept="image/*" capture="environment" />
-
-    <label for="notes">Additional Notes:</label>
-    <textarea id="notes" rows="4"></textarea>
-
-    <button type="submit">Submit Map Out</button>
-
-    <div class="footer-nav">
-      <a href="index.html">← Return to Main Menu</a>
+  <!-- Floating top bar -->
+  <div id="floating-bar">
+    <div class="info-panels-left">
+      <div id="installs-count">Installs Today: 0</div>
+      <div id="current-datetime"></div>
+      <div id="weather-widget"></div>
     </div>
-  </form>
+    <button id="office-use" class="office-use-btn">Office Use Only</button>
+  </div>
+
+  <header class="header-bar">
+    <img src="assets/logo-white.png" alt="Cowboys AC Logo" class="logo" />
+    <h1>Technician Map Out</h1>
+  </header>
+
+  <main>
+    <div class="wizard" id="mapout-wizard">
+      <!-- Step indicators -->
+      <ol class="wizard-steps">
+        <li class="active">1. Customer Address</li>
+        <li>2. Home Data</li>
+        <li>3. Photos</li>
+        <li>4. Equipment</li>
+        <li>5. Ductwork</li>
+      </ol>
+
+      <!-- Wizard form -->
+      <form id="mapout-form">
+        <!-- Step 1 -->
+        <section class="wizard-step active" data-step="1">
+          <h2>Customer Address</h2>
+          <label for="address">Enter Address</label>
+          <input type="text" id="address" name="address" placeholder="123 Main St, City, State ZIP" required />
+          <div class="nav-buttons">
+            <button type="button" class="next-button">Next</button>
+          </div>
+        </section>
+
+        <!-- Step 2 -->
+        <section class="wizard-step" data-step="2">
+          <h2>Home Data</h2>
+          <button type="button" id="fetch-home-data">Fetch from Zillow</button>
+          <div id="home-data-fields">
+            <!-- populate: square footage, year built, etc. -->
+          </div>
+          <div class="nav-buttons">
+            <button type="button" class="back-button">Back</button>
+            <button type="button" class="next-button">Next</button>
+          </div>
+        </section>
+
+        <!-- Step 3 -->
+        <section class="wizard-step" data-step="3">
+          <h2>Upload Photos</h2>
+          <label for="photo-old-unit">Old Unit Photo</label>
+          <input type="file" id="photo-old-unit" name="photos[]" accept="image/*" capture="environment" required />
+          <!-- add more photo upload fields as needed -->
+          <div class="nav-buttons">
+            <button type="button" class="back-button">Back</button>
+            <button type="button" class="next-button">Next</button>
+          </div>
+        </section>
+
+        <!-- Step 4 -->
+        <section class="wizard-step" data-step="4">
+          <h2>Equipment Details</h2>
+          <label for="equipment-model">Model</label>
+          <input type="text" id="equipment-model" name="equipmentModel" placeholder="Enter model number" required />
+
+          <label for="returns-count"># of Returns</label>
+          <input type="number" id="returns-count" name="returnsCount" min="0" required />
+
+          <label for="supplies-count"># of Supplies</label>
+          <input type="number" id="supplies-count" name="suppliesCount" min="0" required />
+
+          <div class="nav-buttons">
+            <button type="button" class="back-button">Back</button>
+            <button type="button" class="next-button">Next</button>
+          </div>
+        </section>
+
+        <!-- Step 5 -->
+        <section class="wizard-step" data-step="5">
+          <h2>Ductwork Info</h2>
+          <label for="duct-type">Duct Type</label>
+          <select id="duct-type" name="ductType">
+            <option value="flexible">Flexible</option>
+            <option value="sheetmetal">Sheet Metal</option>
+            <!-- more options as needed -->
+          </select>
+
+          <label for="duct-layout">Layout Notes</label>
+          <textarea id="duct-layout" name="ductLayout" rows="4" placeholder="Describe layout, dimensions, etc."></textarea>
+
+          <div class="nav-buttons">
+            <button type="button" class="back-button">Back</button>
+            <button type="submit" class="submit-button">Submit</button>
+          </div>
+        </section>
+      </form>
+    </div>
+  </main>
 </body>
 </html>
