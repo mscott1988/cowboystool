@@ -3,34 +3,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Cowboys AC – Performance Report</title>
+  <title>Cowboys AC – CSR Report</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    :root {
-      --bg-color: #0B1F3A;
-      --text-color: #FFFFFF;
-      --accent-color: #E63946;
-    }
     body {
-      background-color: var(--bg-color);
+      background: #0B1F3A;
+      color: #FFFFFF;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: var(--text-color);
       padding: 20px;
-    }
-    #background-svg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: url('assets/circuit.svg') repeat-x;
-      background-size: 200% 100%;
-      opacity: 0.08;
-      pointer-events: none;
-      animation: pan 60s linear infinite;
-      z-index: 0;
-    }
-    @keyframes pan {
-      from { background-position: 0 0; }
-      to { background-position: -100% 0; }
     }
     header {
       display: flex;
@@ -38,65 +18,54 @@
       align-items: center;
     }
     header img {
-      height: 80px;
+      height: 70px;
     }
     h1 {
-      font-size: 2rem;
-      color: var(--accent-color);
+      color: #E63946;
     }
-    .input-section, .notes, .grid {
-      margin-top: 1.5rem;
-      background-color: #334232;
+    .grid, .notes, .input {
+      background: #334232;
       padding: 1rem;
+      margin-top: 1rem;
       border-radius: 10px;
     }
     label, select, input, textarea {
-      font-size: 1rem;
-      margin-right: 10px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1rem;
+      margin: 0.5rem 0.5rem 0.5rem 0;
     }
     table, th, td {
       border: 1px solid #ccc;
-      color: #fff;
-    }
-    th, td {
+      border-collapse: collapse;
       padding: 6px;
-      text-align: center;
+      color: white;
     }
     .generate-btn {
-      margin-top: 20px;
-      background-color: var(--accent-color);
+      background: #E63946;
       color: white;
-      padding: 10px 20px;
-      font-size: 1rem;
       border: none;
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 1rem;
       border-radius: 5px;
       cursor: pointer;
     }
     footer {
-      margin-top: 40px;
+      margin-top: 30px;
+      color: #ccc;
       font-size: 0.9rem;
       text-align: center;
-      color: #ccc;
     }
   </style>
 </head>
 <body>
-  <div id="background-svg"></div>
-
   <header>
-    <img src="assets/cowboyslogo.png" alt="Cowboys AC Logo" />
+    <img src="assets/cowboyslogo.png" alt="Cowboys Logo">
     <div>
       <h1>CSR Weekly Report</h1>
       <p id="date"></p>
     </div>
   </header>
 
-  <div class="input-section">
+  <div class="input">
     <label for="employee">Name:</label>
     <select id="employee">
       <option>Anthony</option><option>Lulu</option><option>Marcela</option>
@@ -117,32 +86,31 @@
     </select>
 
     <label for="value">Value:</label>
-    <input type="number" id="value" min="0" />
+    <input type="number" id="value" min="0">
     <button onclick="addEntry()">Add Entry</button>
   </div>
 
   <div class="grid" id="performanceTable"></div>
 
   <div class="notes">
-    <label for="dailyNotes">Daily Notes:</label><br />
-    <textarea id="dailyNotes" rows="3" cols="60"></textarea><br />
-    <label for="weeklyNotes">Weekly Notes:</label><br />
-    <textarea id="weeklyNotes" rows="4" cols="60"></textarea>
+    <label for="dailyNotes">Daily Notes:</label><br/>
+    <textarea id="dailyNotes" rows="3" cols="50"></textarea><br/>
+    <label for="weeklyNotes">Weekly Notes:</label><br/>
+    <textarea id="weeklyNotes" rows="4" cols="50"></textarea>
   </div>
 
   <button class="generate-btn" onclick="generatePDF()">Generate PDF</button>
 
-  <footer>
-    © 2025 Cowboys AC – cowboysac.com
-  </footer>
+  <footer>© 2025 Cowboys AC – cowboysac.com</footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
 
   <script>
+    const { jsPDF } = window.jspdf;
     document.getElementById("date").innerText = `Generated: ${new Date().toLocaleDateString()}`;
-
-    const data = {};
     const days = ['Thursday','Friday','Saturday','Monday','Tuesday','Wednesday'];
+    let data = {};
 
     function addEntry() {
       const name = document.getElementById('employee').value;
@@ -158,14 +126,18 @@
 
     function renderTable() {
       let html = '<table><thead><tr><th>Name</th><th>Category</th>';
-      days.forEach(d => html += `<th>${d}</th>`);
-      html += '</tr></thead><tbody>';
-
+      days.forEach(day => html += `<th>${day}</th>`);
+      html += '<th>Total</th></tr></thead><tbody>';
       for (let name in data) {
         for (let cat in data[name]) {
           html += `<tr><td>${name}</td><td>${cat}</td>`;
-          days.forEach(day => html += `<td>${data[name][cat][day] || 0}</td>`);
-          html += '</tr>';
+          let total = 0;
+          days.forEach(day => {
+            const val = data[name][cat][day] || 0;
+            total += val;
+            html += `<td>${val}</td>`;
+          });
+          html += `<td>${total}</td></tr>`;
         }
       }
       html += '</tbody></table>';
@@ -173,46 +145,52 @@
     }
 
     function generatePDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
-
-      let y = 40;
+      const doc = new jsPDF();
       doc.setFontSize(18);
-      doc.text('Cowboys AC – CSR Weekly Report', 40, y);
-      y += 30;
-      doc.setFontSize(12);
-      doc.text(`Generated: ${new Date().toLocaleDateString()}`, 40, y);
-      y += 20;
+      doc.text("Cowboys AC – CSR Weekly Report", 40, 40);
+      doc.setFontSize(11);
+      doc.text(`Generated: ${new Date().toLocaleDateString()}`, 40, 60);
 
+      const rows = [];
       for (let name in data) {
         for (let cat in data[name]) {
-          doc.setFont(undefined, 'bold');
-          doc.text(`${name} – ${cat}`, 40, y += 20);
-          doc.setFont(undefined, 'normal');
-          let row = '';
+          const row = [name, cat];
+          let total = 0;
           days.forEach(day => {
-            row += `${day.slice(0, 3)}: ${data[name][cat][day] || 0}  `;
+            const val = data[name][cat][day] || 0;
+            row.push(val);
+            total += val;
           });
-          doc.text(row.trim(), 60, y += 16);
+          row.push(total);
+          rows.push(row);
         }
       }
 
-      y += 40;
-      doc.setFont(undefined, 'bold');
-      doc.text('Daily Notes:', 40, y);
-      doc.setFont(undefined, 'normal');
-      let notes = document.getElementById('dailyNotes').value || 'None';
-      doc.text(notes, 60, y += 16);
+      doc.autoTable({
+        startY: 80,
+        head: [['Name', 'Category', ...days, 'Total']],
+        body: rows,
+        theme: 'grid',
+        headStyles: { fillColor: [230, 57, 70] },
+        styles: { fontSize: 10 },
+      });
 
-      y += 30;
-      doc.setFont(undefined, 'bold');
-      doc.text('Weekly Notes:', 40, y);
-      doc.setFont(undefined, 'normal');
-      let weekly = document.getElementById('weeklyNotes').value || 'None';
-      doc.text(weekly, 60, y += 16);
-
+      let finalY = doc.lastAutoTable.finalY + 20;
+      doc.setFontSize(12);
+      doc.text("Daily Notes:", 40, finalY);
       doc.setFontSize(10);
-      doc.text('© 2025 Cowboys AC – cowboysac.com', 40, 800);
+      const daily = doc.splitTextToSize(document.getElementById('dailyNotes').value || 'None', 500);
+      doc.text(daily, 40, finalY + 14);
+
+      finalY += 40 + (daily.length * 10);
+      doc.setFontSize(12);
+      doc.text("Weekly Notes:", 40, finalY);
+      doc.setFontSize(10);
+      const weekly = doc.splitTextToSize(document.getElementById('weeklyNotes').value || 'None', 500);
+      doc.text(weekly, 40, finalY + 14);
+
+      doc.setFontSize(9);
+      doc.text("© 2025 Cowboys AC – cowboysac.com", 40, 820);
 
       const today = new Date();
       const filename = `CSR Report Weekly – ${today.getMonth()+1}-${today.getDate()}-${today.getFullYear()}.pdf`;
