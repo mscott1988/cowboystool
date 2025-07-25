@@ -3,8 +3,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Cowboys AC – Performance Report</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cowboys AC Performance Board</title>
   <style>
     :root {
       --bg-color: #0B1F3A;
@@ -12,8 +12,8 @@
       --accent-color: #E63946;
     }
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: var(--bg-color);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: var(--text-color);
       padding: 20px;
     }
@@ -36,8 +36,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      z-index: 1;
-      position: relative;
     }
     header img {
       height: 80px;
@@ -46,32 +44,31 @@
       font-size: 2rem;
       color: var(--accent-color);
     }
-    label, select, input, textarea {
-      margin: 10px 5px;
-      font-size: 1rem;
-    }
-    .grid {
-      margin-top: 20px;
-      background: #334232;
-      padding: 10px;
+    .input-section, .notes, .grid {
+      margin-top: 1.5rem;
+      background-color: #334232;
+      padding: 1rem;
       border-radius: 10px;
+    }
+    label, select, input, textarea {
+      font-size: 1rem;
+      margin-right: 10px;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      margin-top: 1rem;
     }
     table, th, td {
       border: 1px solid #ccc;
+      color: #fff;
     }
     th, td {
-      padding: 8px;
+      padding: 6px;
       text-align: center;
     }
-    .notes {
-      margin-top: 20px;
-    }
     .generate-btn {
+      margin-top: 20px;
       background-color: var(--accent-color);
       color: white;
       padding: 10px 20px;
@@ -80,11 +77,8 @@
       border-radius: 5px;
       cursor: pointer;
     }
-    .generate-btn:hover {
-      background-color: #c22d38;
-    }
     footer {
-      margin-top: 30px;
+      margin-top: 40px;
       font-size: 0.9rem;
       text-align: center;
       color: #ccc;
@@ -97,20 +91,16 @@
   <header>
     <img src="assets/cowboyslogo.png" alt="Cowboys AC Logo" />
     <div>
-      <h1>Daily Performance Entry</h1>
+      <h1>CSR Weekly Report</h1>
       <p id="date"></p>
     </div>
   </header>
 
-  <section>
+  <div class="input-section">
     <label for="employee">Name:</label>
     <select id="employee">
-      <option>Anthony</option>
-      <option>Lulu</option>
-      <option>Marcela</option>
-      <option>Michell</option>
-      <option>Alisha</option>
-      <option>Bryan</option>
+      <option>Anthony</option><option>Lulu</option><option>Marcela</option>
+      <option>Michell</option><option>Alisha</option><option>Bryan</option>
     </select>
 
     <label for="category">Category:</label>
@@ -122,37 +112,37 @@
 
     <label for="day">Day:</label>
     <select id="day">
-      <option>Thursday</option>
-      <option>Friday</option>
-      <option>Saturday</option>
-      <option>Monday</option>
-      <option>Tuesday</option>
-      <option>Wednesday</option>
+      <option>Thursday</option><option>Friday</option><option>Saturday</option>
+      <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
     </select>
 
     <label for="value">Value:</label>
     <input type="number" id="value" min="0" />
     <button onclick="addEntry()">Add Entry</button>
-  </section>
+  </div>
 
   <div class="grid" id="performanceTable"></div>
 
   <div class="notes">
     <label for="dailyNotes">Daily Notes:</label><br />
-    <textarea id="dailyNotes" rows="3" cols="50"></textarea><br />
+    <textarea id="dailyNotes" rows="3" cols="60"></textarea><br />
     <label for="weeklyNotes">Weekly Notes:</label><br />
-    <textarea id="weeklyNotes" rows="4" cols="50"></textarea>
+    <textarea id="weeklyNotes" rows="4" cols="60"></textarea>
   </div>
 
   <button class="generate-btn" onclick="generatePDF()">Generate PDF</button>
 
   <footer>
-    &copy; 2025 Cowboys AC – cowboysac.com
+    © 2025 Cowboys AC – cowboysac.com
   </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <script>
     document.getElementById("date").innerText = `Generated: ${new Date().toLocaleDateString()}`;
-    let data = {};
+
+    const data = {};
+    const days = ['Thursday','Friday','Saturday','Monday','Tuesday','Wednesday'];
 
     function addEntry() {
       const name = document.getElementById('employee').value;
@@ -168,56 +158,66 @@
 
     function renderTable() {
       let html = '<table><thead><tr><th>Name</th><th>Category</th>';
-      const days = ['Thursday','Friday','Saturday','Monday','Tuesday','Wednesday'];
       days.forEach(d => html += `<th>${d}</th>`);
       html += '</tr></thead><tbody>';
 
       for (let name in data) {
         for (let cat in data[name]) {
           html += `<tr><td>${name}</td><td>${cat}</td>`;
-          days.forEach(day => {
-            html += `<td>${data[name][cat][day] || 0}</td>`;
-          });
+          days.forEach(day => html += `<td>${data[name][cat][day] || 0}</td>`);
           html += '</tr>';
         }
       }
-
       html += '</tbody></table>';
       document.getElementById('performanceTable').innerHTML = html;
     }
 
     function generatePDF() {
-      alert("PDF export coming in next version. You'll get your logo, table, notes, and footer.");
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+
+      let y = 40;
+      doc.setFontSize(18);
+      doc.text('Cowboys AC – CSR Weekly Report', 40, y);
+      y += 30;
+      doc.setFontSize(12);
+      doc.text(`Generated: ${new Date().toLocaleDateString()}`, 40, y);
+      y += 20;
+
+      for (let name in data) {
+        for (let cat in data[name]) {
+          doc.setFont(undefined, 'bold');
+          doc.text(`${name} – ${cat}`, 40, y += 20);
+          doc.setFont(undefined, 'normal');
+          let row = '';
+          days.forEach(day => {
+            row += `${day.slice(0, 3)}: ${data[name][cat][day] || 0}  `;
+          });
+          doc.text(row.trim(), 60, y += 16);
+        }
+      }
+
+      y += 40;
+      doc.setFont(undefined, 'bold');
+      doc.text('Daily Notes:', 40, y);
+      doc.setFont(undefined, 'normal');
+      let notes = document.getElementById('dailyNotes').value || 'None';
+      doc.text(notes, 60, y += 16);
+
+      y += 30;
+      doc.setFont(undefined, 'bold');
+      doc.text('Weekly Notes:', 40, y);
+      doc.setFont(undefined, 'normal');
+      let weekly = document.getElementById('weeklyNotes').value || 'None';
+      doc.text(weekly, 60, y += 16);
+
+      doc.setFontSize(10);
+      doc.text('© 2025 Cowboys AC – cowboysac.com', 40, 800);
+
+      const today = new Date();
+      const filename = `CSR Report Weekly – ${today.getMonth()+1}-${today.getDate()}-${today.getFullYear()}.pdf`;
+      doc.save(filename);
     }
   </script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-<script>
-  async function generatePDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF('p', 'pt', 'a4');
-    const scale = 2;
-
-    const content = document.body;
-    const canvas = await html2canvas(content, {
-      scale: scale,
-      useCORS: true,
-      scrollY: -window.scrollY
-    });
-
-    const imgData = canvas.toDataURL('image/png');
-    const imgProps = doc.getImageProperties(imgData);
-    const pdfWidth = doc.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-    doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-    const today = new Date();
-    const filename = `CSR Report Weekly – ${today.getMonth()+1}-${today.getDate()}-${today.getFullYear()}.pdf`;
-
-    doc.save(filename);
-  }
-</script>
 </body>
 </html>
