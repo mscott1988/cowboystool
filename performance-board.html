@@ -190,5 +190,34 @@
       alert("PDF export coming in next version. You'll get your logo, table, notes, and footer.");
     }
   </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+  async function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('p', 'pt', 'a4');
+    const scale = 2;
+
+    const content = document.body;
+    const canvas = await html2canvas(content, {
+      scale: scale,
+      useCORS: true,
+      scrollY: -window.scrollY
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    const imgProps = doc.getImageProperties(imgData);
+    const pdfWidth = doc.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+    doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+
+    const today = new Date();
+    const filename = `CSR Report Weekly – ${today.getMonth()+1}-${today.getDate()}-${today.getFullYear()}.pdf`;
+
+    doc.save(filename);
+  }
+</script>
 </body>
 </html>
